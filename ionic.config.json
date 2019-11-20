@@ -1,5 +1,7 @@
 {
   "name": "myMobilityApp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
