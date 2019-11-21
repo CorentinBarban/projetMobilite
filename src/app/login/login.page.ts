@@ -1,4 +1,4 @@
-import {Component, NgModule, OnInit} from '@angular/core';
+import { Component, NgModule, OnInit} from '@angular/core';
 import { MenuController, IonSlides } from '@ionic/angular';
 import { Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
 import { AuthService } from '../services/auth.service';
@@ -60,10 +60,5 @@ export class LoginPage implements OnInit {
 
     ionViewWillEnter() {
         this.menu.enable(false);
-    }
-
-    ionViewDidLeave() {
-        // enable the root left menu when leaving the tutorial page
-        this.menu.enable(true);
     }
 }
