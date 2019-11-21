@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { MenuController, IonSlides } from '@ionic/angular';
 import {ActionSheetController, Platform, AlertController, LoadingController, ToastController} from '@ionic/angular'; //Plugins supplémentaires
 
 import { //Import des plugins GoogleMaps nécessaires
@@ -26,6 +26,7 @@ export class HomePage {
     labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     labelIndex = 0;
     constructor(
+        public menu: MenuController,
         public alertController: AlertController,
         public actionCtrl: ActionSheetController,
         public loadingCtrl: LoadingController,
@@ -83,5 +84,9 @@ export class HomePage {
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE
     });
+    }
+
+    ionViewWillEnter() {
+        this.menu.enable(true);
     }
 }
