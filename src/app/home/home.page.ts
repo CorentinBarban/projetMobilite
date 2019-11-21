@@ -28,7 +28,6 @@ export class HomePage {
       public alertController: AlertController,
       public actionCtrl: ActionSheetController,
       private platform: Platform,
-      public geolocation: Geolocation
   ) {
     if (this.platform.is('cordova')) {
       this.loadMap();
