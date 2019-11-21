@@ -1,9 +1,37 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>profilDetails</ion-title>
+    <ion-title>Mon compte</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div class="login-box">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+
+          <ion-item>
+            <ion-input type="text" placeholder="Name" name="name"  required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="text" placeholder="Email" name="email" required></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input type="password" placeholder="Password" name="password"></ion-input>
+          </ion-item>
+
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="signup-col">
+        <ion-button class="submit-btn" full type="submit">Save</ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
 
 </ion-content>
+

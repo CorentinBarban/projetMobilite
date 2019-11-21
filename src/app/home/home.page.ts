@@ -84,6 +84,9 @@ export class HomePage {
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE
     });
+
+        this.map = GoogleMaps.create(marker);
+        console.log("Salut");
     }
 
     ionViewWillEnter() {
