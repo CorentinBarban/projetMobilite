@@ -1,32 +1,47 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar  color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-button shape="round" (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>Mon compte</ion-title>
+    <ion-buttons slot="end" >
+      <ion-button shape="round" (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="login-box">
+    <ion-avatar class ="profile-photo" ion->
+      <img src="assets/images/post-malone.jpg">
+    </ion-avatar>
     <ion-row>
       <ion-col>
         <ion-list inset>
           <ion-item>
-            <ion-input type="text" placeholder="Name" name="name"  required></ion-input>
+            <ion-input type="text" placeholder="Nom" name="nom"  required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="text" placeholder="Prénom" name="prenom"  required></ion-input>
           </ion-item>
           <ion-item>
             <ion-input type="text" placeholder="Email" name="email" required></ion-input>
           </ion-item>
           <ion-item>
-            <ion-input type="password" placeholder="Password" name="password"></ion-input>
+            <ion-input type="password" placeholder="Mot de passe" name="password"></ion-input>
           </ion-item>
         </ion-list>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="signup-col ion-text-center">
-        <ion-button expand="block">Sauvegarder</ion-button>
+        <ion-button expand="block">Sauvegarder
+          <ion-ripple-effect type="bounded"></ion-ripple-effect>
+        </ion-button>
       </ion-col>
     </ion-row>
   </div>

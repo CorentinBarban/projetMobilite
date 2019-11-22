@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuController, IonSlides } from '@ionic/angular';
+import {MenuController, IonSlides, NavController} from '@ionic/angular';
 import {ActionSheetController, Platform, AlertController, LoadingController, ToastController} from '@ionic/angular'; //Plugins supplémentaires
 
 import { //Import des plugins GoogleMaps nécessaires
@@ -31,7 +31,8 @@ export class HomePage {
         public actionCtrl: ActionSheetController,
         public loadingCtrl: LoadingController,
         public toastCtrl: ToastController,
-        private platform: Platform
+        private platform: Platform,
+        public navCtrl : NavController
     ) {
         if (this.platform.is('cordova')) {
             this.loadMap();
@@ -92,4 +93,5 @@ export class HomePage {
     ionViewWillEnter() {
         this.menu.enable(true);
     }
+
 }

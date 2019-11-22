@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MenuController} from "@ionic/angular";
+import {Location} from "@angular/common";
+import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-profil-details',
@@ -9,7 +12,10 @@ import {MenuController} from "@ionic/angular";
 export class ProfilDetailsPage implements OnInit {
 
   constructor(
-      public menu: MenuController,
+      private menu: MenuController,
+      private location : Location,
+      private authService : AuthService,
+      private router :Router
   ) { }
 
   ngOnInit() {
@@ -17,6 +23,16 @@ export class ProfilDetailsPage implements OnInit {
 
   ionViewWillEnter() {
     this.menu.enable(true);
+  }
+
+  goBack(){
+    this.location.back();
+  }
+
+  logOut(){
+    this.authService.doLogout().then(function (){
+        this.router.navigate(['/login'])
+    });
   }
 
 }
