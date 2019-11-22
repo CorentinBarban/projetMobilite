@@ -19,20 +19,21 @@ export class ProfilDetailsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
   }
 
   ionViewWillEnter() {
     this.menu.enable(true);
   }
 
-  goBack(){
-    this.location.back();
-  }
+    goBack() {
+        this.location.back();
+    }
 
-  logOut(){
-    this.authService.doLogout().then(function (){
-        this.router.navigate(['/login'])
-    });
-  }
+    logOut() {
+        this.authService.doLogout().then(function () {
+            this.router.navigate(['/login'])
+        });
+    }
 
 }

@@ -15,14 +15,14 @@ import { Router } from '@angular/router';
 export class AppComponent {
     public appPages = [
         {
-            title: 'Home',
+            title: 'Accueil',
             url: '/home',
             icon: 'home'
         },
         {
-            title: 'List',
+            title: 'Liste des lieux visités',
             url: '/list',
-            icon: 'list'
+            icon: 'compass'
         },
         {
             title: 'Profil',
