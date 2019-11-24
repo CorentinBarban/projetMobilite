@@ -33,6 +33,12 @@ export class RegisterPage implements OnInit {
 
     ngOnInit() {
         this.validations_form = this.formBuilder.group({
+            nom: new FormControl('', Validators.compose([
+                Validators.required
+            ])),
+            prenom: new FormControl('', Validators.compose([
+                Validators.required
+            ])),
             email: new FormControl('', Validators.compose([
                 Validators.required,
                 Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
@@ -47,11 +53,11 @@ export class RegisterPage implements OnInit {
     tryRegister(value) {
         this.authService.doRegister(value)
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 this.errorMessage = '';
                 this.successMessage = 'Your account has been created. Please log in.';
             }, err => {
-                console.log(err);
+                // console.log(err);
                 this.errorMessage = err.message;
                 this.successMessage = '';
             });
@@ -64,4 +70,6 @@ export class RegisterPage implements OnInit {
     ionViewWillEnter() {
         this.menu.enable(false);
     }
+
+
 }
