@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import {VueModerateurPage} from "./vue-moderateur/vue-moderateur.page";
 
 const routes: Routes = [
   {
@@ -12,8 +13,8 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
-    path: 'list',
-    loadChildren: () => import('./list/list.module').then(m => m.ListPageModule)
+    path: 'vue-moderateur',
+    loadChildren: () => import('./vue-moderateur/vue-moderateur.module').then(m => m.VueModerateurPageModule)
   },
   {
     path: 'login',
@@ -26,7 +27,26 @@ const routes: Routes = [
   {
     path: 'register',
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
-  }
+  },
+  {
+    path: 'carte-visites',
+    loadChildren: () => import('./carte-visites/carte-visites.module').then(m => m.CarteVisitesPageModule)
+  },
+  {
+    path: 'liste-messages',
+    loadChildren: () => import('./liste-messages/liste-messages.module').then(m => m.ListeMessagesPageModule)
+  },
+  {
+    path: 'liste-lieux',
+    loadChildren: () => import('./liste-lieux/liste-lieux.module').then(m => m.ListeLieuxPageModule)
+  },
+  /*{
+    path: 'tabs',
+    component: VueModerateurPage,
+    children: [
+      {path: 'lieux', loadChildren: '../liste-lieux/liste-lieux.module#ListeLieuxPageModule'},
+    ]
+  }*/
 ];
 
 @NgModule({

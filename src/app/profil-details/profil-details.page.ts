@@ -54,11 +54,21 @@ export class ProfilDetailsPage implements OnInit {
     }
 
     logOut() {
+        presentToast();
         this.authService.doLogout().then(function () {
+
             this.router.navigate(['/login']);
         });
-    }
 
+        async function presentToast() {
+            const toast = document.createElement('ion-toast');
+            toast.message = 'Déconnecté';
+            toast.duration = 1000;
+
+            document.body.appendChild(toast);
+            return toast.present();
+        }
+    }
 
     initField() {
         let that = this;

@@ -21,13 +21,18 @@ export class AppComponent {
         },
         {
             title: 'Liste des lieux visités',
-            url: '/list',
+            url: '/carte-visites',
             icon: 'compass'
         },
         {
-            title: 'Profil',
-            url: '/profil-details',
-            icon: 'list'
+            title: 'Liste des messages',
+            url: '/liste-messages',
+            icon: 'mail'
+        },
+        {
+            title: 'Interface modérateur',
+            url: '/vue-moderateur',
+            icon: 'lock'
         }
     ];
 

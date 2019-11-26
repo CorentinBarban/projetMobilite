@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ListPage } from './list.page';
+import {ListeMessagesPage} from './liste-messages.page';
 
 describe('ListPage', () => {
-  let component: ListPage;
-  let fixture: ComponentFixture<ListPage>;
+    let component: ListeMessagesPage;
+    let fixture: ComponentFixture<ListeMessagesPage>;
   let listPage: HTMLElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListPage ],
+        declarations: [ListeMessagesPage],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ListPage);
+      fixture = TestBed.createComponent(ListeMessagesPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

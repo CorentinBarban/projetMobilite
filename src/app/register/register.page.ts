@@ -16,12 +16,12 @@ export class RegisterPage implements OnInit {
     successMessage: string = '';
     validation_messages = {
         'email': [
-            { type: 'required', message: 'Email is required.' },
-            { type: 'pattern', message: 'Enter a valid email.' }
+            {type: 'required', message: 'Adresse email requise.'},
+            {type: 'pattern', message: 'Merci d\'entrer une adresse valide.'}
         ],
         'password': [
-            { type: 'required', message: 'Password is required.' },
-            { type: 'minlength', message: 'Password must be at least 5 characters long.' }
+            {type: 'required', message: 'Mot de passe requis.'},
+            {type: 'minlength', message: 'Le mot de passe doit faire au moins 5 caractères.'}
         ]
     };
     constructor(

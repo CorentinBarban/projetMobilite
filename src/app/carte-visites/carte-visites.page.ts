@@ -13,18 +13,20 @@ import { //Import des plugins GoogleMaps nécessaires
 } from '@ionic-native/google-maps';
 
 import {Geolocation} from '@ionic-native/geolocation';
+import {Location} from "@angular/common";
 
 @Component({
     selector: 'app-home',
-    templateUrl: 'home.page.html',
-    styleUrls: ['home.page.scss'],
+    templateUrl: 'carte-visites.page.html',
+    styleUrls: ['carte-visites.page.scss'],
 })
-export class HomePage implements OnInit {
+export class CarteVisitesPage implements OnInit {
     map: GoogleMap; //Instance de carte
     loading: any
     location: any;
-    labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     labelIndex = 0;
+
+    //Créer liste de marqueurs
 
     constructor(
         public menu: MenuController,
@@ -33,7 +35,8 @@ export class HomePage implements OnInit {
         public loadingCtrl: LoadingController,
         public toastCtrl: ToastController,
         private platform: Platform,
-        public navCtrl: NavController
+        public navCtrl: NavController,
+        private navLocation: Location,
     ) {
 
     }
@@ -50,63 +53,40 @@ export class HomePage implements OnInit {
             API_KEY_FOR_BROWSER_DEBUG: 'AIzaSyB_6JvTaVpooi1IF96UN4Cw-lo1nM9yfUo'
         });
 
-        this.map = GoogleMaps.create('map_canvas');
+        this.map = GoogleMaps.create('map_canvas', {
+            camera: {
+                target: {
+                    lat: 43.610769,
+                    lng: 3.876716
+                },
+                zoom: 11,
+                tilt: 30
+            }
+        });
     }
 
     async getPosition() {
-        this.map.setOptions({zoomControl: false});
         this.loading = await this.loadingCtrl.create({
             message: 'Patientez...'
         });
         await this.loading.present();
 
-        // Récupération de la géolocalisation
+        // Affichage des marqueurs
         this.map.getMyLocation().then((location: MyLocation) => {
             this.loading.dismiss();
-            this.location = location;
-            console.log(JSON.stringify(location, null, 2));
-
-            // Animation de caméra
-            this.map.animateCamera({
-                target: location.latLng,
-                zoom: 18,
-                tilt: 30
-            });
+            //Charger liste marqueurs
 
             // Ajout d'un marker
-            let marker: Marker = this.map.addMarkerSync({
-                title: 'Position',
-                snippet: 'Vous êtes ici !',
-                icon:'blue',
-                position: location.latLng,
-                animation: GoogleMapsAnimation.BOUNCE
-            });
 
-            marker.showInfoWindow();
-        });
-    }
-
-    onClickAddMarkerPosition(event) {
-        let that = this;
-
-        this.map.getMyLocation().then((location: MyLocation) => {
-            that.addMarker(location.latLng);
-            console.log(location);
-        });
-
-
-    };
-
-    addMarker(location) {
-        let marker: Marker = this.map.addMarkerSync({
-            position: location,
-            label: this.labels[this.labelIndex++ % this.labels.length],
-            animation: GoogleMapsAnimation.BOUNCE
         });
     }
 
     ionViewWillEnter() {
         this.menu.enable(true);
+    }
+
+    goBack() {
+        this.navLocation.back();
     }
 
 }
