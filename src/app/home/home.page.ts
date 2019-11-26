@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MenuController, IonSlides, NavController} from '@ionic/angular';
 import {ActionSheetController, Platform, AlertController, LoadingController, ToastController} from '@ionic/angular'; //Plugins supplémentaires
 
@@ -19,12 +19,13 @@ import {Geolocation} from '@ionic-native/geolocation';
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
     map: GoogleMap; //Instance de carte
     loading: any
     location: any;
     labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     labelIndex = 0;
+
     constructor(
         public menu: MenuController,
         public alertController: AlertController,
@@ -32,12 +33,15 @@ export class HomePage {
         public loadingCtrl: LoadingController,
         public toastCtrl: ToastController,
         private platform: Platform,
-        public navCtrl : NavController
+        public navCtrl: NavController
     ) {
-        if (this.platform.is('cordova')) {
-            this.loadMap();
-            this.getPosition();
-        }
+
+    }
+
+    async ngOnInit() {
+        await this.platform.ready();
+        await this.loadMap();
+        await this.getPosition();
     }
 
     loadMap() {
@@ -46,11 +50,11 @@ export class HomePage {
             API_KEY_FOR_BROWSER_DEBUG: 'AIzaSyB_6JvTaVpooi1IF96UN4Cw-lo1nM9yfUo'
         });
 
-        this.map = GoogleMaps.create('map_canvas', {});
+        this.map = GoogleMaps.create('map_canvas');
     }
 
     async getPosition() {
-        this.map.setOptions({zoomControl : false});
+        this.map.setOptions({zoomControl: false});
         this.loading = await this.loadingCtrl.create({
             message: 'Patientez...'
         });
@@ -73,21 +77,30 @@ export class HomePage {
             let marker: Marker = this.map.addMarkerSync({
                 title: 'Position',
                 snippet: 'Vous êtes ici !',
+                icon:'blue',
                 position: location.latLng,
                 animation: GoogleMapsAnimation.BOUNCE
             });
+
+            marker.showInfoWindow();
         });
     }
 
-    addMarker(location){
+
+    onClickAddMarkerPosition(event) {
+        let that = this;
+        this.map.getMyLocation().then((location: MyLocation) => {
+            that.addMarker(location.latLng);
+            console.log(location);
+        });
+    };
+
+    addMarker(location) {
         let marker: Marker = this.map.addMarkerSync({
             position: location,
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE
-    });
-
-        this.map = GoogleMaps.create(marker);
-        console.log("Salut");
+        });
     }
 
     ionViewWillEnter() {
