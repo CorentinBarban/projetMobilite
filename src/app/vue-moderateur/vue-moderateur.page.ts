@@ -1,22 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 
 @Component({
     selector: 'app-list',
     templateUrl: 'vue-moderateur.page.html',
     styleUrls: ['vue-moderateur.page.scss']
 })
+
 export class VueModerateurPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ title: string; note: string; icon: string }> = [];
 
     constructor() {
-        for (let i = 1; i < 11; i++) {
-            this.items.push({
-                title: 'Adresse ' + i + ', Heure : ' + i,
-                note: 'Lieu n°' + i,
-                icon: 'flag'
-            });
-        }
     }
 
     ngOnInit() {

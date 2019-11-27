@@ -25,13 +25,8 @@ export class AppComponent {
             icon: 'compass'
         },
         {
-            title: 'Liste des messages',
-            url: '/liste-messages',
-            icon: 'mail'
-        },
-        {
             title: 'Interface modérateur',
-            url: '/vue-moderateur',
+            url: '/vue-moderateur/liste-lieux',
             icon: 'lock'
         }
     ];

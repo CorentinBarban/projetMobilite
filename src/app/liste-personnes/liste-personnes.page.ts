@@ -3,10 +3,10 @@ import {Location} from "@angular/common";
 
 @Component({
     selector: 'app-list',
-    templateUrl: 'liste-lieux.page.html',
-    styleUrls: ['liste-lieux.page.scss']
+    templateUrl: 'liste-personnes.page.html',
+    styleUrls: ['liste-personnes.page.scss']
 })
-export class ListeLieuxPage implements OnInit {
+export class ListePersonnesPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ title: string; note: string; icon: string }> = [];
 
@@ -14,18 +14,14 @@ export class ListeLieuxPage implements OnInit {
     ) {
         for (let i = 1; i < 11; i++) {
             this.items.push({
-                title: 'Contenu ' + i,
-                note: 'Personne ' + i,
-                icon: 'flag'
+                title: 'Personne ' + i,
+                note: null,
+                icon: 'contact'
             });
         }
     }
 
     ngOnInit() {
-    }
-
-    goBack() {
-        this.navLocation.back();
     }
 
 }

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {VueModerateurPage} from "./vue-moderateur/vue-moderateur.page";
 
 const routes: Routes = [
   {
@@ -35,18 +34,7 @@ const routes: Routes = [
   {
     path: 'liste-messages',
     loadChildren: () => import('./liste-messages/liste-messages.module').then(m => m.ListeMessagesPageModule)
-  },
-  {
-    path: 'liste-lieux',
-    loadChildren: () => import('./liste-lieux/liste-lieux.module').then(m => m.ListeLieuxPageModule)
-  },
-  /*{
-    path: 'tabs',
-    component: VueModerateurPage,
-    children: [
-      {path: 'lieux', loadChildren: '../liste-lieux/liste-lieux.module#ListeLieuxPageModule'},
-    ]
-  }*/
+  }
 ];
 
 @NgModule({

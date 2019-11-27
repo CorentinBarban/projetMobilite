@@ -11,12 +11,21 @@ import {VueModerateurPage} from './vue-moderateur.page';
         CommonModule,
         FormsModule,
         IonicModule,
-        RouterModule.forChild([
-            {
-                path: '',
-                component: VueModerateurPage
-            }
-        ])
+        RouterModule.forChild([{
+            path: '',
+            component: VueModerateurPage,
+            children: [
+                {
+                    path: 'liste-lieux',
+                    loadChildren: () => import('../liste-lieux/liste-lieux.module').then(m => m.ListeLieuxPageModule)
+                },
+                {
+                    path: 'liste-personnes',
+                    loadChildren: () => import('../liste-personnes/liste-personnes.module').then(m => m.ListePersonnesPageModule)
+                }
+            ]
+        }]),
+
     ],
     declarations: [VueModerateurPage]
 })
