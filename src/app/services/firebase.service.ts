@@ -52,14 +52,6 @@ export class FirebaseService {
                     starCountRef.on('value', function(snapshot) {
                         resolve(snapshot.val());
                     });
-
-                    // firebase.database().ref('/users/' + currentUser.uid).on('value').then(function (snapshot) {
-                    //     var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
-                    //     console.log(currentUser.uid);
-                    // }).then(
-                    //     res => resolve(res),
-                    //     err => reject(err)
-                    // );
                 }
             });
         });
@@ -92,20 +84,22 @@ export class FirebaseService {
     //     })
     // }
     //
-    // createTask(value) {
-    //     return new Promise<any>((resolve, reject) => {
-    //         let currentUser = firebase.auth().currentUser;
-    //         this.afs.collection('people').doc(currentUser.uid).collection('tasks').add({
-    //             title: value.title,
-    //             description: value.description,
-    //             image: value.image
-    //         })
-    //             .then(
-    //                 res => resolve(res),
-    //                 err => reject(err)
-    //             )
-    //     })
-    // }
+    createUserPosition(value) {
+        return new Promise<any>((resolve, reject) => {
+            let currentUser = firebase.auth().currentUser;
+
+            let postData = {
+                lat: value.lat,
+                lgt: value.lgt,
+                horodatage : value.date,
+                message: "Test"
+
+            };
+
+            let ref = firebase.database().ref("/users/"+ currentUser.uid);
+            ref.child("lieux").push(postData);
+        })
+    }
 
     // encodeImageUri(imageUri, callback) {
     //     var c = document.createElement('canvas');

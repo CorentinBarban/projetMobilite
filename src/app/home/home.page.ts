@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuController, IonSlides, NavController} from '@ionic/angular';
 import {ActionSheetController, Platform, AlertController, LoadingController, ToastController} from '@ionic/angular'; //Plugins supplémentaires
-
+import {FirebaseService} from '../services/firebase.service';
 import { //Import des plugins GoogleMaps nécessaires
     GoogleMaps,
     GoogleMap,
@@ -33,7 +33,8 @@ export class HomePage implements OnInit {
         public loadingCtrl: LoadingController,
         public toastCtrl: ToastController,
         private platform: Platform,
-        public navCtrl: NavController
+        public navCtrl: NavController,
+        public firebaseService : FirebaseService,
     ) {
 
     }
@@ -90,7 +91,7 @@ export class HomePage implements OnInit {
         let that = this;
 
         this.map.getMyLocation().then((location: MyLocation) => {
-            that.addMarker(location.latLng);
+            that.addMarker(location);
             console.log(location);
         });
 
@@ -99,10 +100,24 @@ export class HomePage implements OnInit {
 
     addMarker(location) {
         let marker: Marker = this.map.addMarkerSync({
-            position: location,
+            position: location.latLng,
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE
         });
+        this.saveMarkerPosition(location);
+    }
+
+    saveMarkerPosition(location){
+        console.log(location);
+        let value = {
+            lat:location.latLng.lat,
+            lgt: location.latLng.lng,
+            date: location.time
+        };
+        this.firebaseService.createUserPosition(value).then(function(result){
+            console.log(result);
+        });
+
     }
 
     ionViewWillEnter() {
