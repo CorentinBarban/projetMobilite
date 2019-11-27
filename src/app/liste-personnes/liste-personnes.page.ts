@@ -21,6 +21,10 @@ export class ListePersonnesPage implements OnInit {
         }
     }
 
+    afficherDetails(item) { //Doit rediriger vers une nouvelle instance de liste-lieux avec la liste des lieux visités par la personne en question
+        console.log("hey ! " + item)
+    }
+
     ngOnInit() {
     }
 

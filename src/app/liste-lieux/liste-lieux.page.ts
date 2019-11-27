@@ -24,6 +24,10 @@ export class ListeLieuxPage implements OnInit {
     ngOnInit() {
     }
 
+    afficherDetails(item) { // Nouvelle instance de liste de personnes ayant visité ce lieu
+        console.log(item)
+    }
+
     goBack() {
         this.navLocation.back();
     }
