@@ -34,7 +34,15 @@ const routes: Routes = [
   {
     path: 'liste-messages',
     loadChildren: () => import('./liste-messages/liste-messages.module').then(m => m.ListeMessagesPageModule)
-  }
+  },
+    {
+        path: 'liste-personnes',
+        loadChildren: () => import('./liste-personnes-fragment/liste-personnes.module').then(m => m.ListePersonnesPageModule)
+    },
+    {
+        path: 'liste-lieux',
+        loadChildren: () => import('./liste-lieux-fragment/liste-lieux.module').then(m => m.ListeLieuxPageModule)
+    }
 ];
 
 @NgModule({

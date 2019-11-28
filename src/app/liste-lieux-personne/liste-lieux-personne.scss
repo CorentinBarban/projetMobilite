@@ -1,0 +1,30 @@
+.profile-photo {
+  width: 200px !important;
+  height: 200px !important;
+  max-width: 100% !important; //any size
+  max-height: 100% !important; //any size
+  margin: auto;
+  border: solid;
+  border-color: #0039dc;
+}
+
+.infos-personne {
+  padding-top: 10px;
+}
+
+.nom-personne {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.nom-personne #nom {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.nom-personne #mail {
+  font-size: 15px;
+  color: #86888f;
+  font-style: italic;
+}

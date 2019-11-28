@@ -1,34 +1,27 @@
 import {Component, OnInit} from '@angular/core';
 import {Location} from "@angular/common";
-import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-list',
-    templateUrl: 'liste-lieux.page.html',
-    styleUrls: ['liste-lieux.page.scss']
+    templateUrl: 'liste-personnes-lieu.page.html',
+    styleUrls: ['liste-personnes-lieu.page.scss']
 })
-export class ListeLieuxPage implements OnInit {
+export class ListePersonnesLieuPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ title: string; note: string; icon: string }> = [];
 
-    constructor(
-        private navLocation: Location,
-        private router: Router
+    constructor(private navLocation: Location,
     ) {
         for (let i = 1; i < 21; i++) {
             this.items.push({
-                title: 'Lieu ' + i,
+                title: 'Personne ' + i,
                 note: null,
-                icon: 'flag'
+                icon: 'contact'
             });
         }
     }
 
     ngOnInit() {
-    }
-
-    afficherDetails(item) {
-        this.router.navigateByUrl('/vue-moderateur/liste-lieux/liste-personnes-lieu');
     }
 
     goBack() {

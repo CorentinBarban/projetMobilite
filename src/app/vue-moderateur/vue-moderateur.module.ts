@@ -22,7 +22,16 @@ import {VueModerateurPage} from './vue-moderateur.page';
                 {
                     path: 'liste-personnes',
                     loadChildren: () => import('../liste-personnes-fragment/liste-personnes.module').then(m => m.ListePersonnesPageModule)
+                },
+                {
+                    path: 'liste-lieux/liste-personnes-lieu',
+                    loadChildren: () => import('../liste-personnes-lieu/liste-personnes-lieu.module').then(m => m.ListePersonnesLieuPageModule)
+                },
+                {
+                    path: 'liste-personnes/liste-lieux-personne',
+                    loadChildren: () => import('../liste-lieux-personne/liste-lieux-personne.module').then(m => m.ListeLieuxPersonnePageModule)
                 }
+
             ]
         }]),
 
