@@ -17,11 +17,11 @@ import {VueModerateurPage} from './vue-moderateur.page';
             children: [
                 {
                     path: 'liste-lieux',
-                    loadChildren: () => import('../liste-lieux/liste-lieux.module').then(m => m.ListeLieuxPageModule)
+                    loadChildren: () => import('../liste-lieux-fragment/liste-lieux.module').then(m => m.ListeLieuxPageModule)
                 },
                 {
                     path: 'liste-personnes',
-                    loadChildren: () => import('../liste-personnes/liste-personnes.module').then(m => m.ListePersonnesPageModule)
+                    loadChildren: () => import('../liste-personnes-fragment/liste-personnes.module').then(m => m.ListePersonnesPageModule)
                 }
             ]
         }]),

@@ -12,10 +12,10 @@ export class ListeLieuxPage implements OnInit {
 
     constructor(private navLocation: Location,
     ) {
-        for (let i = 1; i < 11; i++) {
+        for (let i = 1; i < 21; i++) {
             this.items.push({
-                title: 'Contenu ' + i,
-                note: 'Personne ' + i,
+                title: 'Lieu ' + i,
+                note: null,
                 icon: 'flag'
             });
         }
