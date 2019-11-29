@@ -14,6 +14,8 @@ import { //Import des plugins GoogleMaps nécessaires
 } from '@ionic-native/google-maps';
 
 import {Geolocation} from '@ionic-native/geolocation';
+import {TimeInterval} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-home',
@@ -36,6 +38,7 @@ export class HomePage implements OnInit {
         private platform: Platform,
         public navCtrl: NavController,
         public firebaseService: FirebaseService,
+        public router: Router
     ) {
 
     }
@@ -43,9 +46,9 @@ export class HomePage implements OnInit {
     async ngOnInit() {
         await this.platform.ready();
         await this.loadMap();
-        await this.getPosition();
-        await this.getAllMarkerUser();
         await this.getAllMarkers();
+        await this.getAllMarkerUser();
+        await this.getPosition();
     }
 
     /**
@@ -85,7 +88,7 @@ export class HomePage implements OnInit {
             let marker: Marker = this.map.addMarkerSync({
                 title: 'Position',
                 snippet: 'Vous êtes ici !',
-                icon: 'blue',
+                icon: 'red',
                 position: location.latLng,
                 animation: GoogleMapsAnimation.BOUNCE
             });
@@ -103,8 +106,28 @@ export class HomePage implements OnInit {
             position: location.latLng,
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE,
-            icon: color,
+            icon: color
         });
+
+        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            this.router.navigate(['/liste-messages']);
+        })
+    }
+
+    addMarkerAvecHeure(location, color, heure) {
+
+        let marker: Marker = this.map.addMarkerSync({
+            position: location.latLng,
+            label: this.labels[this.labelIndex++ % this.labels.length],
+            animation: GoogleMapsAnimation.BOUNCE,
+            icon: color,
+            title: 'Horodatage : ' + heure,
+            snippet: 'Nombre de messages déposés : '
+        });
+
+        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            this.router.navigate(['/liste-messages']);
+        })
     }
 
     /**
@@ -120,8 +143,9 @@ export class HomePage implements OnInit {
             date: location.time,
             msg: message
         };
-        this.firebaseService.createUserPosition(value);
 
+        this.firebaseService.createUserPosition(value);
+        this.firebaseService.createLieu(value);
     }
 
     ionViewWillEnter() {
@@ -175,8 +199,8 @@ export class HomePage implements OnInit {
                         'lat': lieu.lat,
                         'lng': lieu.lgt
                     }
-                }
-                that.addMarker(position, 'red')
+                };
+                that.addMarker(position, 'blue')
             }
         });
     }
@@ -186,13 +210,15 @@ export class HomePage implements OnInit {
         this.firebaseService.getAllMarkers().then(function (lieux) {
             for (let key of Object.keys(lieux)) {
                 let lieu = lieux[key];
+                let heure = lieu.horodatage;
                 let position = {
                     'latLng': {
                         'lat': lieu.lat,
                         'lng': lieu.lgt
                     }
-                }
-                that.addMarker(position, 'green')
+                };
+                let timestamp = heure;
+                that.addMarkerAvecHeure(position, 'green', timestamp);
             }
         });
     }

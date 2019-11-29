@@ -3,6 +3,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {objectKeys} from "codelyzer/util/objectKeys";
 
 @Injectable({
     providedIn: 'root'
@@ -57,9 +58,38 @@ export class FirebaseService {
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
             ref.child("lieux").push(postData);
+        })
+    }
 
-            let ref2 = firebase.database().ref("/lieux/");
-            ref2.push(postData);
+    createLieu(value) {
+        return new Promise<any>((resolve, reject) => {
+            let currentUser = firebase.auth().currentUser;
+            let postData = {
+                lat: value.lat,
+                lgt: value.lgt,
+                horodatage: value.date,
+                message: value.msg,
+                idUser: currentUser.uid
+            };
+
+            let ref = firebase.database().ref("/lieux/");
+            let key = ref.push(postData);
+            let uniqueID = key.key;
+
+            this.createMessage(value, uniqueID);
+        })
+    }
+
+    createMessage(value, keyPosition) {
+        return new Promise<any>((resolve, reject) => {
+            let currentUser = firebase.auth().currentUser;
+            let postData = {
+                message: value.msg,
+                idUser: currentUser.uid,
+                idLieu: keyPosition
+            };
+            let ref = firebase.database().ref("/messages/");
+            ref.push(postData);
         })
     }
 
@@ -89,6 +119,20 @@ export class FirebaseService {
             });
         });
     }
+
+    getAllMessagesForCurrentPosition() {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    let starCountRef = firebase.database().ref('/messages/');
+                    starCountRef.on('value', function (snapshot) {
+                        resolve(snapshot.val());
+                    });
+                }
+            });
+        });
+    }
+
     // encodeImageUri(imageUri, callback) {
     //     var c = document.createElement('canvas');
     //     var ctx = c.getContext('2d');
