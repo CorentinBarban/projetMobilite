@@ -17,33 +17,6 @@ export class FirebaseService {
     ) {
     }
 
-    //
-    // getTasks() {
-    //     return new Promise<any>((resolve, reject) => {
-    //         this.afAuth.user.subscribe(currentUser => {
-    //             if (currentUser) {
-    //                 this.snapshotChangesSubscription = this.afs.collection('people').doc(currentUser.uid).collection('tasks').snapshotChanges();
-    //                 resolve(this.snapshotChangesSubscription);
-    //             }
-    //         })
-    //     })
-    // }
-    //
-    // getTask(taskId) {
-    //     return new Promise<any>((resolve, reject) => {
-    //         this.afAuth.user.subscribe(currentUser => {
-    //             if (currentUser) {
-    //                 this.snapshotChangesSubscription = this.afs.doc<any>('people/' + currentUser.uid + '/tasks/' + taskId).valueChanges()
-    //                     .subscribe(snapshots => {
-    //                         resolve(snapshots);
-    //                     }, err => {
-    //                         reject(err)
-    //                     })
-    //             }
-    //         })
-    //     });
-    // }
-
     getUserInformation() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
@@ -72,30 +45,16 @@ export class FirebaseService {
     //             )
     //     })
     // }
-    //
-    // deleteTask(taskKey) {
-    //     return new Promise<any>((resolve, reject) => {
-    //         let currentUser = firebase.auth().currentUser;
-    //         this.afs.collection('people').doc(currentUser.uid).collection('tasks').doc(taskKey).delete()
-    //             .then(
-    //                 res => resolve(res),
-    //                 err => reject(err)
-    //             )
-    //     })
-    // }
-    //
+
     createUserPosition(value) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
-
             let postData = {
                 lat: value.lat,
                 lgt: value.lgt,
                 horodatage : value.date,
-                message: "Test"
-
+                message: value.msg
             };
-
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
             ref.child("lieux").push(postData);
         })

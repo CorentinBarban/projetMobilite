@@ -87,32 +87,23 @@ export class HomePage implements OnInit {
         });
     }
 
-    onClickAddMarkerPosition(event) {
-        let that = this;
 
-        this.map.getMyLocation().then((location: MyLocation) => {
-            that.addMarker(location);
-            console.log(location);
-        });
-
-
-    };
-
-    addMarker(location) {
+    addMarker(location,message) {
         let marker: Marker = this.map.addMarkerSync({
             position: location.latLng,
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE
         });
-        this.saveMarkerPosition(location);
+        this.saveMarkerPosition(location,message);
     }
 
-    saveMarkerPosition(location){
+    saveMarkerPosition(location,message){
         console.log(location);
         let value = {
             lat:location.latLng.lat,
             lgt: location.latLng.lng,
-            date: location.time
+            date: location.time,
+            msg : message
         };
         this.firebaseService.createUserPosition(value).then(function(result){
             console.log(result);
@@ -124,4 +115,35 @@ export class HomePage implements OnInit {
         this.menu.enable(true);
     }
 
+    async presentMessageEvent() {
+        const alert = await this.alertController.create({
+            header: 'Ecrire un message',
+            inputs : [{
+                name: 'message',
+                type: 'text',
+                placeholder: 'Saisir votre message'
+            }],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                        console.log('Confirm Cancel');
+                    }
+                }, {
+                    text: 'Valider',
+                    handler: (messageData) => {
+                        let that = this;
+                        this.map.getMyLocation().then((location: MyLocation) => {
+                            that.addMarker(location,messageData.message);
+                            console.log(location);
+                        });
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+    }
 }
