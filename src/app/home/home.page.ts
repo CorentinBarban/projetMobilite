@@ -45,6 +45,7 @@ export class HomePage implements OnInit {
         await this.loadMap();
         await this.getPosition();
         await this.getAllMarkerUser();
+        await this.getAllMarkers();
     }
 
     /**
@@ -97,11 +98,12 @@ export class HomePage implements OnInit {
      * Ajouter un marker
      * @param location
      */
-    addMarker(location) {
+    addMarker(location, color) {
         let marker: Marker = this.map.addMarkerSync({
             position: location.latLng,
             label: this.labels[this.labelIndex++ % this.labels.length],
-            animation: GoogleMapsAnimation.BOUNCE
+            animation: GoogleMapsAnimation.BOUNCE,
+            icon: color,
         });
     }
 
@@ -151,7 +153,7 @@ export class HomePage implements OnInit {
                     handler: (messageData) => {
                         let that = this;
                         this.map.getMyLocation().then((location: MyLocation) => {
-                            that.addMarker(location);
+                            that.addMarker(location, 'red');
                             that.saveMarkerPosition(location, messageData.message);
                         });
                     }
@@ -174,7 +176,23 @@ export class HomePage implements OnInit {
                         'lng': lieu.lgt
                     }
                 }
-                that.addMarker(position)
+                that.addMarker(position, 'red')
+            }
+        });
+    }
+
+    getAllMarkers() {
+        let that = this;
+        this.firebaseService.getAllMarkers().then(function (lieux) {
+            for (let key of Object.keys(lieux)) {
+                let lieu = lieux[key];
+                let position = {
+                    'latLng': {
+                        'lat': lieu.lat,
+                        'lng': lieu.lgt
+                    }
+                }
+                that.addMarker(position, 'green')
             }
         });
     }

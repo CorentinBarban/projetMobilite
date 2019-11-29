@@ -31,7 +31,6 @@ export class AuthService {
     }
 
     updateInformation(value){
-        console.log("hey");
         let postData = {
             prenom: value.prenom,
             nom : value.nom ,

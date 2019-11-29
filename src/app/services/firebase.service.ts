@@ -57,6 +57,9 @@ export class FirebaseService {
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
             ref.child("lieux").push(postData);
+
+            let ref2 = firebase.database().ref("/lieux/");
+            ref2.push(postData);
         })
     }
 
@@ -67,6 +70,19 @@ export class FirebaseService {
                 if (currentUser) {
                     let starCountRef = firebase.database().ref('/users/' + currentUser.uid + "/lieux/");
                     starCountRef.on('value', function(snapshot) {
+                        resolve(snapshot.val());
+                    });
+                }
+            });
+        });
+    }
+
+    getAllMarkers() {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    let starCountRef = firebase.database().ref('/lieux/');
+                    starCountRef.on('value', function (snapshot) {
                         resolve(snapshot.val());
                     });
                 }
