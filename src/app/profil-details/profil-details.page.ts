@@ -135,9 +135,24 @@ export class ProfilDetailsPage implements OnInit {
             that.validationsForm.get('prenom').setValue(value.prenom);
             that.validationsForm.get('email').setValue(value.email);
             that.urlImage = value.url;
-            that.validationsForm.get('url').setValue(that.urlImage);
+            that.validationsForm.get('url').setValue(value.url);
         });
 
+    }
+
+    updateInformation(value) {
+        presentToast();
+        this.authService.updateInformation(value);
+        this.goBack();
+
+        async function presentToast() {
+            const toast = document.createElement('ion-toast');
+            toast.message = 'Mis à jour';
+            toast.duration = 1000;
+
+            document.body.appendChild(toast);
+            return toast.present();
+        }
     }
 
 

@@ -25,16 +25,23 @@ export class AuthService {
                         photoURL: 'https://example.com/jane-q-user/profile.jpg'
                     });
 
-                    let postData = {
-                        prenom: value.prenom,
-                        nom : value.nom ,
-                        email: value.email,
-                        url: value.url
-                    };
-                    let updates = {};
-                    updates['/users/' + user.user.uid] = postData;
-                    firebase.database().ref().update(updates);
+                    this.updateInformation(value);
                 });
+        });
+    }
+
+    updateInformation(value){
+        console.log("hey");
+        let postData = {
+            prenom: value.prenom,
+            nom : value.nom ,
+            email: value.email,
+            url: value.url
+        };
+        this.afAuth.user.subscribe(currentUser=>{
+            let updates = {};
+            updates['/users/' + currentUser.uid] = postData;
+            firebase.database().ref().update(updates);
         });
     }
 

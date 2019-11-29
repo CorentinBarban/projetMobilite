@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content>
-    <form class="form" [formGroup]="validationsForm">
+    <form class="form" [formGroup]="validationsForm" (ngSubmit)="updateInformation(validationsForm.value)">
         <div class="login-box">
             <div class="photo-personne">
                 <input (change)="uploadImage($event)" type="file" name="file" id="file" class="inputfile" accept="image/*">
@@ -50,7 +50,7 @@
             </ion-row>
             <ion-row>
                 <ion-col class="signup-col ion-text-center">
-                    <ion-button expand="block">Sauvegarder
+                    <ion-button type="submit" expand="block">Sauvegarder
                         <ion-ripple-effect type="bounded"></ion-ripple-effect>
                     </ion-button>
                 </ion-col>
