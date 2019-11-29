@@ -1,0 +1,25 @@
+.profile-photo {
+  width: 200px !important;
+  height: 200px !important;
+  max-width: 100% !important; //any size
+  max-height: 100% !important; //any size
+  margin: auto;
+  border: solid;
+  border-color: #0039dc;
+}
+
+.photo-personne {
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}

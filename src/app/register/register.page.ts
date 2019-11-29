@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 
 export class RegisterPage implements OnInit {
     validations_form: FormGroup;
+    url: string= "/assets/images/post-malone.jpg";
     errorMessage: string = '';
     successMessage: string = '';
     validation_messages = {
