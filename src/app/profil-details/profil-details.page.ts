@@ -14,6 +14,7 @@ import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms'
 export class ProfilDetailsPage implements OnInit {
 
     validationsForm: FormGroup;
+    url: String="/assets/images/post-malone.jpg";
 
     constructor(
         private menu: MenuController,
@@ -76,6 +77,8 @@ export class ProfilDetailsPage implements OnInit {
             that.validationsForm.get('nom').setValue(value.nom);
             that.validationsForm.get('prenom').setValue(value.prenom);
             that.validationsForm.get('email').setValue(value.email);
+            that.url = value.url;
+            console.log(value.url);
         });
 
     }

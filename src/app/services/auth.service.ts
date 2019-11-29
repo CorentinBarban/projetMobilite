@@ -28,7 +28,8 @@ export class AuthService {
                     let postData = {
                         prenom: value.prenom,
                         nom : value.nom ,
-                        email: value.email
+                        email: value.email,
+                        url: value.url
                     };
                     let updates = {};
                     updates['/users/' + user.user.uid] = postData;
