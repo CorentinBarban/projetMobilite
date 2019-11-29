@@ -20,11 +20,6 @@ export class AppComponent {
             icon: 'home'
         },
         {
-            title: 'Liste des lieux visités',
-            url: '/carte-visites',
-            icon: 'compass'
-        },
-        {
             title: 'Interface modérateur',
             url: '/vue-moderateur/liste-lieux',
             icon: 'lock'

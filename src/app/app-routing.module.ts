@@ -28,10 +28,6 @@ const routes: Routes = [
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: 'carte-visites',
-    loadChildren: () => import('./carte-visites/carte-visites.module').then(m => m.CarteVisitesPageModule)
-  },
-  {
     path: 'liste-messages',
     loadChildren: () => import('./liste-messages/liste-messages.module').then(m => m.ListeMessagesPageModule)
   },
