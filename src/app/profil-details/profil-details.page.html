@@ -17,12 +17,18 @@
 <ion-content>
     <form class="form" [formGroup]="validationsForm">
         <div class="login-box">
-            <ion-avatar class="profile-photo">
-                <img [src]="url">
-            </ion-avatar>
+            <div class="photo-personne">
+                <input (change)="uploadImage($event)" type="file" name="file" id="file" class="inputfile" accept="image/*">
+                <label for="file"><ion-avatar class="profile-photo">
+                    <img [src]="urlImage">
+                </ion-avatar></label>
+            </div>
             <ion-row>
                 <ion-col>
                     <ion-list inset>
+                        <ion-item class="idImage">
+                            <ion-input type="text" formControlName="url"></ion-input>
+                        </ion-item>
                         <ion-item>
                             <ion-label position="floating" color="primary">Nom</ion-label>
                             <ion-input type="text" name="nom" formControlName="nom" required></ion-input>
