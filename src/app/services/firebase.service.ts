@@ -60,6 +60,19 @@ export class FirebaseService {
         })
     }
 
+
+    getAllMarkerForCurrentUser(){
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    let starCountRef = firebase.database().ref('/users/' + currentUser.uid + "/lieux/");
+                    starCountRef.on('value', function(snapshot) {
+                        resolve(snapshot.val());
+                    });
+                }
+            });
+        });
+    }
     // encodeImageUri(imageUri, callback) {
     //     var c = document.createElement('canvas');
     //     var ctx = c.getContext('2d');

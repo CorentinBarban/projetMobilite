@@ -9,7 +9,8 @@ import { //Import des plugins GoogleMaps nécessaires
     Marker,
     GoogleMapsAnimation,
     MyLocation,
-    Environment
+    Environment,
+    LatLng
 } from '@ionic-native/google-maps';
 
 import {Geolocation} from '@ionic-native/geolocation';
@@ -34,7 +35,7 @@ export class HomePage implements OnInit {
         public toastCtrl: ToastController,
         private platform: Platform,
         public navCtrl: NavController,
-        public firebaseService : FirebaseService,
+        public firebaseService: FirebaseService,
     ) {
 
     }
@@ -43,8 +44,12 @@ export class HomePage implements OnInit {
         await this.platform.ready();
         await this.loadMap();
         await this.getPosition();
+        await this.getAllMarkerUser();
     }
 
+    /**
+     * Charger la map avec google map
+     */
     loadMap() {
         Environment.setEnv({
             API_KEY_FOR_BROWSER_RELEASE: 'AIzaSyB_6JvTaVpooi1IF96UN4Cw-lo1nM9yfUo',
@@ -54,6 +59,9 @@ export class HomePage implements OnInit {
         this.map = GoogleMaps.create('map_canvas');
     }
 
+    /**
+     * Obtenir ca position actuelle
+     */
     async getPosition() {
         this.map.setOptions({zoomControl: false});
         this.loading = await this.loadingCtrl.create({
@@ -65,8 +73,6 @@ export class HomePage implements OnInit {
         this.map.getMyLocation().then((location: MyLocation) => {
             this.loading.dismiss();
             this.location = location;
-            console.log(JSON.stringify(location, null, 2));
-
             // Animation de caméra
             this.map.animateCamera({
                 target: location.latLng,
@@ -78,7 +84,7 @@ export class HomePage implements OnInit {
             let marker: Marker = this.map.addMarkerSync({
                 title: 'Position',
                 snippet: 'Vous êtes ici !',
-                icon:'blue',
+                icon: 'blue',
                 position: location.latLng,
                 animation: GoogleMapsAnimation.BOUNCE
             });
@@ -87,27 +93,32 @@ export class HomePage implements OnInit {
         });
     }
 
-
-    addMarker(location,message) {
+    /**
+     * Ajouter un marker
+     * @param location
+     */
+    addMarker(location) {
         let marker: Marker = this.map.addMarkerSync({
             position: location.latLng,
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE
         });
-        this.saveMarkerPosition(location,message);
     }
 
-    saveMarkerPosition(location,message){
-        console.log(location);
+    /**
+     * Sauvegarder un marker
+     * @param location
+     * @param message
+     */
+    saveMarkerPosition(location, message) {
+
         let value = {
-            lat:location.latLng.lat,
+            lat: location.latLng.lat,
             lgt: location.latLng.lng,
             date: location.time,
-            msg : message
+            msg: message
         };
-        this.firebaseService.createUserPosition(value).then(function(result){
-            console.log(result);
-        });
+        this.firebaseService.createUserPosition(value);
 
     }
 
@@ -115,10 +126,14 @@ export class HomePage implements OnInit {
         this.menu.enable(true);
     }
 
+    /**
+     * Ouvrir la pop-up pour laisser un message sur un lieu
+     * @returns {Promise<void>}
+     */
     async presentMessageEvent() {
         const alert = await this.alertController.create({
             header: 'Ecrire un message',
-            inputs : [{
+            inputs: [{
                 name: 'message',
                 type: 'text',
                 placeholder: 'Saisir votre message'
@@ -136,8 +151,8 @@ export class HomePage implements OnInit {
                     handler: (messageData) => {
                         let that = this;
                         this.map.getMyLocation().then((location: MyLocation) => {
-                            that.addMarker(location,messageData.message);
-                            console.log(location);
+                            that.addMarker(location);
+                            that.saveMarkerPosition(location, messageData.message);
                         });
                     }
                 }
@@ -145,5 +160,22 @@ export class HomePage implements OnInit {
         });
 
         await alert.present();
+    }
+
+
+    getAllMarkerUser() {
+        let that = this;
+        this.firebaseService.getAllMarkerForCurrentUser().then(function (lieux) {
+            for (let key of Object.keys(lieux)) {
+                let lieu = lieux[key];
+                let position = {
+                    'latLng': {
+                        'lat': lieu.lat,
+                        'lng': lieu.lgt
+                    }
+                }
+                that.addMarker(position)
+            }
+        });
     }
 }
