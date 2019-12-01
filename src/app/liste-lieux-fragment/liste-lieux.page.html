@@ -14,10 +14,11 @@
 
 <ion-content>
     <ion-list>
-        <ion-item *ngFor="let item of items" (click)="afficherDetails(item.title)">
+        <ion-item *ngFor="let item of items" (click)="afficherDetails(item.id, item.count)">
             <ion-icon [name]="item.icon" slot="start"></ion-icon>
             <ion-label class="id">{{item.id}}</ion-label>
             <ion-label>Lieu {{item.count}}</ion-label>
+            <ion-label slot="end" class="coord">{{item.lat}}<br/>{{item.lgt}}</ion-label>
         </ion-item>
     </ion-list>
 </ion-content>

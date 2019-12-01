@@ -23,8 +23,21 @@
   font-weight: bold;
 }
 
-.nom-lieu #coord {
+.nom-lieu #lat {
   font-size: 15px;
   color: #86888f;
   font-style: italic;
+}
+
+.nom-lieu #lgt {
+  font-size: 15px;
+  color: #86888f;
+  font-style: italic;
+}
+
+hr {
+  border-top: 1px solid gray;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }

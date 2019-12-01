@@ -10,7 +10,7 @@ import {FirebaseService} from "../services/firebase.service";
 })
 export class ListeLieuxPage implements OnInit {
     private selectedItem: any;
-    public items: Array<{ title: string; note: string; icon: string }> = [];
+    public items: Array<{ id: string; count: string; icon: string; lat: string; lgt: string; }> = [];
 
     constructor(
         private navLocation: Location,
@@ -29,8 +29,10 @@ export class ListeLieuxPage implements OnInit {
             for (let key of Object.keys(lieux)) {
                 let lieu = lieux[key];
                 items.push({
-                    id: lieu.horodatage,
+                    id: key,
                     count: i,
+                    lat: 'Lat: ' + lieu.lat,
+                    lgt: 'Lgt: ' + lieu.lgt,
                     icon: 'flag'
                 })
                 i++;
@@ -38,8 +40,8 @@ export class ListeLieuxPage implements OnInit {
         });
     }
 
-    afficherDetails(item) {
-        this.router.navigateByUrl('/vue-moderateur/liste-lieux/liste-personnes-lieu');
+    afficherDetails(id, count) {
+        this.router.navigate(['/vue-moderateur/liste-lieux/liste-personnes-lieu', id, count]);
     }
 
     goBack() {

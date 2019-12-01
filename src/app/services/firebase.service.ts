@@ -33,24 +33,20 @@ export class FirebaseService {
         });
     }
 
+    getPosition(idLieu) {
+        return new Promise<any>((resolve, reject) => {
+            let starCountRef = firebase.database().ref('/lieux/' + idLieu);
+            starCountRef.on('value', function (snapshot) {
+                resolve(snapshot.val());
+            });
+        });
+    }
+
     getAllUsers() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
                 if (currentUser) {
                     let starCountRef = firebase.database().ref('/users/');
-                    starCountRef.on('value', function (snapshot) {
-                        resolve(snapshot.val());
-                    });
-                }
-            });
-        });
-    }
-
-    getUserPositions(user) { //FAUSSE
-        return new Promise<any>((resolve, reject) => {
-            this.afAuth.user.subscribe(currentUser => {
-                if (currentUser) {
-                    let starCountRef = firebase.database().ref('/users/' + user.uid + '/lieux/');
                     starCountRef.on('value', function (snapshot) {
                         resolve(snapshot.val());
                     });
@@ -95,13 +91,13 @@ export class FirebaseService {
                 message: value.msg
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
-            ref.child("lieux").push(postData);
-            this.createLieu(value);
+            let key = ref.child("lieux").push(postData);
+            this.createLieu(value, key.key);
             this.countLieu++;
         })
     }
 
-    createLieu(value) {
+    createLieu(value, uniqueID) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
             let postData = {
@@ -109,7 +105,7 @@ export class FirebaseService {
                 lgt: value.lgt,
                 horodatage: value.date,
                 message: value.msg,
-                idUser: currentUser.email
+                idUser: uniqueID
             };
             let ref = firebase.database().ref("/lieux/");
             let key = ref.push(postData);

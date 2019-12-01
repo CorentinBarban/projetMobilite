@@ -24,7 +24,7 @@ import {VueModerateurPage} from './vue-moderateur.page';
                     loadChildren: () => import('../liste-personnes-fragment/liste-personnes.module').then(m => m.ListePersonnesPageModule)
                 },
                 {
-                    path: 'liste-lieux/liste-personnes-lieu',
+                    path: 'liste-lieux/liste-personnes-lieu/:id/:count',
                     loadChildren: () => import('../liste-personnes-lieu/liste-personnes-lieu.module').then(m => m.ListePersonnesLieuPageModule)
                 },
                 {
