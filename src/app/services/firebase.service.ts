@@ -11,11 +11,13 @@ import {objectKeys} from "codelyzer/util/objectKeys";
 export class FirebaseService {
 
     private snapshotChangesSubscription: any;
+    private countLieu = 1;
 
     constructor(
         public afs: AngularFirestore,
-        public afAuth: AngularFireAuth
+        public afAuth: AngularFireAuth,
     ) {
+
     }
 
     getUserInformation() {
@@ -24,6 +26,32 @@ export class FirebaseService {
                 if (currentUser) {
                     let starCountRef = firebase.database().ref('/users/' + currentUser.uid);
                     starCountRef.on('value', function(snapshot) {
+                        resolve(snapshot.val());
+                    });
+                }
+            });
+        });
+    }
+
+    getAllUsers() {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    let starCountRef = firebase.database().ref('/users/');
+                    starCountRef.on('value', function (snapshot) {
+                        resolve(snapshot.val());
+                    });
+                }
+            });
+        });
+    }
+
+    getUserPositions(user) {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    let starCountRef = firebase.database().ref('/users/' + user.uid + '/lieux/');
+                    starCountRef.on('value', function (snapshot) {
                         resolve(snapshot.val());
                     });
                 }
@@ -51,6 +79,7 @@ export class FirebaseService {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
             let postData = {
+                idLieu: this.countLieu,
                 lat: value.lat,
                 lgt: value.lgt,
                 horodatage : value.date,
@@ -58,6 +87,8 @@ export class FirebaseService {
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
             ref.child("lieux").push(postData);
+            this.createLieu(value);
+            this.countLieu++;
         })
     }
 
@@ -69,24 +100,21 @@ export class FirebaseService {
                 lgt: value.lgt,
                 horodatage: value.date,
                 message: value.msg,
-                idUser: currentUser.uid
+                idUser: currentUser.email
             };
-
             let ref = firebase.database().ref("/lieux/");
             let key = ref.push(postData);
-            let uniqueID = key.key;
-
-            this.createMessage(value, uniqueID);
+            this.createMessage(value, key.key);
         })
     }
 
-    createMessage(value, keyPosition) {
+    createMessage(value, uniqueID) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
             let postData = {
                 message: value.msg,
                 idUser: currentUser.uid,
-                idLieu: keyPosition
+                idLieu: uniqueID
             };
             let ref = firebase.database().ref("/messages/");
             ref.push(postData);
@@ -112,19 +140,6 @@ export class FirebaseService {
             this.afAuth.user.subscribe(currentUser => {
                 if (currentUser) {
                     let starCountRef = firebase.database().ref('/lieux/');
-                    starCountRef.on('value', function (snapshot) {
-                        resolve(snapshot.val());
-                    });
-                }
-            });
-        });
-    }
-
-    getAllMessagesForCurrentPosition() {
-        return new Promise<any>((resolve, reject) => {
-            this.afAuth.user.subscribe(currentUser => {
-                if (currentUser) {
-                    let starCountRef = firebase.database().ref('/messages/');
                     starCountRef.on('value', function (snapshot) {
                         resolve(snapshot.val());
                     });

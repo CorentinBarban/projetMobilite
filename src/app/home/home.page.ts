@@ -93,6 +93,12 @@ export class HomePage implements OnInit {
                 animation: GoogleMapsAnimation.BOUNCE
             });
 
+            /*marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            let location = marker.get('position');
+            console.log("Envoi location marker : " + location);
+            this.router.navigate(['/liste-messages'],location);
+        })*/
+
             marker.showInfoWindow();
         });
     }
@@ -109,9 +115,11 @@ export class HomePage implements OnInit {
             icon: color
         });
 
-        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            this.router.navigate(['/liste-messages']);
-        })
+        /*marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            let location = marker.get('position');
+            console.log("Envoi location marker : " + location);
+            this.router.navigate(['/liste-messages'],location);
+        })*/
     }
 
     addMarkerAvecHeure(location, color, heure) {
@@ -125,9 +133,11 @@ export class HomePage implements OnInit {
             snippet: 'Nombre de messages déposés : '
         });
 
-        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            this.router.navigate(['/liste-messages']);
-        })
+        /*marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            let location = marker.get('position');
+            console.log("Envoi location marker : " + location);
+            this.router.navigate(['/liste-messages'],location);
+        })*/
     }
 
     /**
@@ -145,7 +155,6 @@ export class HomePage implements OnInit {
         };
 
         this.firebaseService.createUserPosition(value);
-        this.firebaseService.createLieu(value);
     }
 
     ionViewWillEnter() {

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Location} from "@angular/common";
 import {Router} from "@angular/router";
+import {FirebaseService} from "../services/firebase.service";
 
 @Component({
     selector: 'app-list',
@@ -13,18 +14,28 @@ export class ListeLieuxPage implements OnInit {
 
     constructor(
         private navLocation: Location,
-        private router: Router
+        private router: Router,
+        private firebaseService: FirebaseService,
     ) {
-        for (let i = 1; i < 21; i++) {
-            this.items.push({
-                title: 'Lieu ' + i,
-                note: null,
-                icon: 'flag'
-            });
-        }
+        this.initFields(this.items);
     }
 
     ngOnInit() {
+    }
+
+    initFields(items) {
+        let i = 1;
+        this.firebaseService.getAllMarkers().then(function (lieux) { // Récupérer les lieux, regarder dans l'idUser.
+            for (let key of Object.keys(lieux)) {
+                let lieu = lieux[key];
+                items.push({
+                    id: lieu.horodatage,
+                    count: i,
+                    icon: 'flag'
+                })
+                i++;
+            }
+        });
     }
 
     afficherDetails(item) {

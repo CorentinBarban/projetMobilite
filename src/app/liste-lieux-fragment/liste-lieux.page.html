@@ -16,10 +16,8 @@
     <ion-list>
         <ion-item *ngFor="let item of items" (click)="afficherDetails(item.title)">
             <ion-icon [name]="item.icon" slot="start"></ion-icon>
-            {{item.title}}
-            <div class="item-note" slot="end">
-                {{item.note}}
-            </div>
+            <ion-label class="id">{{item.id}}</ion-label>
+            <ion-label>Lieu {{item.count}}</ion-label>
         </ion-item>
     </ion-list>
 </ion-content>
