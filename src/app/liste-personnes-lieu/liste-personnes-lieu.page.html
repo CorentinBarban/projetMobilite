@@ -12,7 +12,7 @@
 <ion-content>
     <div class="infos-lieu">
         <ion-avatar class="profile-photo">
-            <img src="/assets/images/post-malone.jpg">
+            <img src="/assets/images/lieu.jpg">
         </ion-avatar>
     </div>
     <div class="nom-lieu">
@@ -26,6 +26,9 @@
     <div class="liste-personnes">
         <ion-list>
             <ion-item *ngFor="let item of listePersonnes">
+                <ion-avatar slot="start">
+                    <img [src]="item.url">
+                </ion-avatar>
                 <ion-label>{{item.nom}}</ion-label>
                 <ion-label slot="end" class="mail">{{item.email}}</ion-label>
             </ion-item>

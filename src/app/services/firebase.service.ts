@@ -35,10 +35,15 @@ export class FirebaseService {
 
     getPosition(idLieu) {
         return new Promise<any>((resolve, reject) => {
-            let starCountRef = firebase.database().ref('/lieux/' + idLieu);
-            starCountRef.on('value', function (snapshot) {
-                resolve(snapshot.val());
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    let starCountRef = firebase.database().ref('/lieux/' + idLieu);
+                    starCountRef.on('value', function (snapshot) {
+                        resolve(snapshot.val());
+                    });
+                }
             });
+
         });
     }
 
@@ -91,13 +96,13 @@ export class FirebaseService {
                 message: value.msg
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
-            let key = ref.child("lieux").push(postData);
-            this.createLieu(value, key.key);
+            ref.child("lieux").push(postData);
+            this.createLieu(value);
             this.countLieu++;
         })
     }
 
-    createLieu(value, uniqueID) {
+    createLieu(value) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
             let postData = {
@@ -105,7 +110,7 @@ export class FirebaseService {
                 lgt: value.lgt,
                 horodatage: value.date,
                 message: value.msg,
-                idUser: uniqueID
+                idUser: currentUser.uid
             };
             let ref = firebase.database().ref("/lieux/");
             let key = ref.push(postData);
