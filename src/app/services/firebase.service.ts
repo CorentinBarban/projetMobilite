@@ -90,10 +90,6 @@ export class FirebaseService {
             let currentUser = firebase.auth().currentUser;
             let postData = {
                 idLieu: this.countLieu,
-                lat: value.lat,
-                lgt: value.lgt,
-                horodatage : value.date,
-                message: value.msg
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
             ref.child("lieux").push(postData);
@@ -109,7 +105,7 @@ export class FirebaseService {
                 lat: value.lat,
                 lgt: value.lgt,
                 horodatage: value.date,
-                message: value.msg,
+                'messages': {'message': value.msg},
                 idUser: currentUser.uid
             };
             let ref = firebase.database().ref("/lieux/");
@@ -128,6 +124,17 @@ export class FirebaseService {
             };
             let ref = firebase.database().ref("/messages/");
             ref.push(postData);
+        })
+    }
+
+    addMessageToLieu(value, idLieu) {
+        return new Promise<any>((resolve, reject) => {
+            let currentUser = firebase.auth().currentUser;
+            let postData = {
+                message: value.msg
+            };
+            let ref = firebase.database().ref("/lieux/" + idLieu);
+            ref.child("messages").push(postData);
         })
     }
 

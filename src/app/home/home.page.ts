@@ -183,6 +183,13 @@ export class HomePage implements OnInit {
         await alert.present();
     }
 
+    async marquerLieu() {
+        let that = this;
+        this.map.getMyLocation().then((location: MyLocation) => {
+            that.addMarker(location, 'blue');
+            that.saveMarkerPosition(location, null);
+        });
+    }
 
     getAllMarkerUser() {
         let that = this;
