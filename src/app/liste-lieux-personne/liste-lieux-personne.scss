@@ -8,6 +8,14 @@
   border-color: #0039dc;
 }
 
+#vide {
+  font-size: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #86888f;
+  font-style: italic;
+}
+
 .infos-personne {
   padding-top: 10px;
 }
@@ -27,4 +35,21 @@
   font-size: 15px;
   color: #86888f;
   font-style: italic;
+}
+
+.liste-lieux {
+  text-align: center;
+}
+
+.coord {
+  font-size: 10px;
+  color: #86888f;
+  font-style: italic;
+}
+
+hr {
+  border-top: 1px solid gray;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }

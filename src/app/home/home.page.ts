@@ -218,6 +218,7 @@ export class HomePage implements OnInit {
         let that = this;
         this.firebaseService.getAllMarkers().then(function (lieux) {
             for (let key of Object.keys(lieux)) {
+                console.log(key);
                 let lieu = lieux[key];
                 let heure = lieu.horodatage;
                 let position = {

@@ -130,7 +130,7 @@ export class ProfilDetailsPage implements OnInit {
 
     initField() {
         let that = this;
-        this.fireService.getUserInformation().then(function(value) {
+        this.fireService.getCurrentUserInformation().then(function (value) {
             that.validationsForm.get('nom').setValue(value.nom);
             that.validationsForm.get('prenom').setValue(value.prenom);
             that.validationsForm.get('email').setValue(value.email);

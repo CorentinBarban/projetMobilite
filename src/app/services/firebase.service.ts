@@ -20,7 +20,7 @@ export class FirebaseService {
 
     }
 
-    getUserInformation() {
+    getCurrentUserInformation() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
                 if (currentUser) {
@@ -46,7 +46,7 @@ export class FirebaseService {
         });
     }
 
-    getUserPositions(user) {
+    getUserPositions(user) { //FAUSSE
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
                 if (currentUser) {
@@ -55,6 +55,15 @@ export class FirebaseService {
                         resolve(snapshot.val());
                     });
                 }
+            });
+        });
+    }
+
+    getUserInformation(userId) {
+        return new Promise<any>((resolve, reject) => {
+            let starCountRef = firebase.database().ref('/users/' + userId);
+            starCountRef.on('value', function (snapshot) {
+                resolve(snapshot.val());
             });
         });
     }

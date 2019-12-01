@@ -12,22 +12,22 @@
 <ion-content>
     <div class="infos-personne">
         <ion-avatar class="profile-photo">
-            <img [src]="photoURL">
+            <img id="url">
         </ion-avatar>
     </div>
     <div class="nom-personne">
-        <ion-label id="nom">{{nom}}</ion-label>
+        <ion-label id="nom"></ion-label>
         <br/>
-        <ion-label id="mail">{{email}}</ion-label>
+        <ion-label id="mail"></ion-label>
     </div>
+    <hr>
     <div class="liste-lieux">
+        <ion-label id="vide"></ion-label>
         <ion-list>
-            <ion-item *ngFor="let item of items">
+            <ion-item *ngFor="let item of listeLieux">
                 <ion-icon [name]="item.icon" slot="start"></ion-icon>
-                {{item.id}}
-                <div class="item-note" slot="end">
-                    {{item.note}}
-                </div>
+                <ion-label>{{item.id}}</ion-label>
+                <ion-label slot="end" class="coord">{{item.lat}}<br/>{{item.lgt}}</ion-label>
             </ion-item>
         </ion-list>
     </div>

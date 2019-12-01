@@ -12,40 +12,47 @@ import {FirebaseDatabase} from "@angular/fire/firebase.app.module";
 })
 export class ListeLieuxPersonnePage implements OnInit {
     private selectedItem: any;
-    public items: Array<{ id: string; coord: string; icon: string; horodatage: string; }> = [];
-    private personne;
+    public listeLieux: Array<{ id: string; lat: string; lgt: string; icon: string; horodatage: string; }> = [];
+    private idPersonne;
     private email;
     private nom;
     private photoURL;
-
 
     constructor(private navLocation: Location,
                 private firebaseService: FirebaseService,
                 private activatedRoute: ActivatedRoute
     ) {
-        this.activatedRoute.queryParams.subscribe((res) => {
-            this.personne = res;
-            console.log(this.personne);
-            this.email = this.personne.email;
-            this.nom = this.personne.nom;
-            this.photoURL = this.personne.url;
+        this.activatedRoute.params.subscribe((res) => {
+            this.idPersonne = res['id'];
+            console.log('Id : ' + this.idPersonne);
         });
-
-        //this.initFields(this.personne, this.items);
     }
 
     ngOnInit() {
+        this.initFields(this.idPersonne, this.listeLieux);
     }
 
-    async initFields(user, items) {
-        this.firebaseService.getUserPositions(user).then(function (lieux) { // Récupérer les users, matcher avec l'adresse mail, regarder dans les lieux, matcher avec l'adresse mail.
-            for (let key of Object.keys(lieux)) {
-                let lieu = lieux[key];
-                items.push({
-                    id: lieu.email,
-                    coord: lieu.nom + ' ' + lieu.prenom,
-                    icon: 'flag',
-                })
+    initFields(user, listeLieux) {
+        this.firebaseService.getUserInformation(user).then(function (infos) {
+
+            document.getElementById("nom").innerHTML = infos.nom + ' ' + infos.prenom;
+            document.getElementById("mail").innerHTML = infos.email;
+            let image = document.getElementById("url") as HTMLImageElement;
+            image.src = infos.url;
+
+            if (infos.lieux != undefined) {
+                for (let keyLieu of Object.keys(infos.lieux)) {
+                    let lieu = infos.lieux[keyLieu];
+                    listeLieux.push({
+                        id: 'Lieu ' + lieu.idLieu,
+                        lat: 'Lat: ' + lieu.lat,
+                        lgt: 'Lgt: ' + lieu.lgt,
+                        horodatage: lieu.horodatage,
+                        icon: 'flag'
+                    });
+                }
+            } else {
+                document.getElementById("vide").innerHTML = "La liste de lieux pour cet utilisateur est vide.";
             }
         });
     }
