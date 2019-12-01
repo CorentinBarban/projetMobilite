@@ -93,12 +93,6 @@ export class HomePage implements OnInit {
                 animation: GoogleMapsAnimation.BOUNCE
             });
 
-            /*marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            let location = marker.get('position');
-            console.log("Envoi location marker : " + location);
-            this.router.navigate(['/liste-messages'],location);
-        })*/
-
             marker.showInfoWindow();
         });
     }
@@ -115,11 +109,7 @@ export class HomePage implements OnInit {
             icon: color
         });
 
-        /*marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            let location = marker.get('position');
-            console.log("Envoi location marker : " + location);
-            this.router.navigate(['/liste-messages'],location);
-        })*/
+        this.createMarkerListener(marker);
     }
 
     addMarkerAvecHeure(location, color, heure) {
@@ -133,11 +123,7 @@ export class HomePage implements OnInit {
             snippet: 'Nombre de messages déposés : '
         });
 
-        /*marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            let location = marker.get('position');
-            console.log("Envoi location marker : " + location);
-            this.router.navigate(['/liste-messages'],location);
-        })*/
+        this.createMarkerListener(marker);
     }
 
     /**
@@ -186,7 +172,7 @@ export class HomePage implements OnInit {
                     handler: (messageData) => {
                         let that = this;
                         this.map.getMyLocation().then((location: MyLocation) => {
-                            that.addMarker(location, 'red');
+                            that.addMarker(location, 'blue');
                             that.saveMarkerPosition(location, messageData.message);
                         });
                     }
@@ -212,6 +198,15 @@ export class HomePage implements OnInit {
                 that.addMarker(position, 'blue')
             }
         });
+    }
+
+    createMarkerListener(marker) {
+        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            let loc = marker.get('position');
+            console.log("Envoi location marker : " + loc);
+            let location = loc.lat + '&' + loc.lng;
+            this.router.navigate(['/liste-messages', location]);
+        })
     }
 
     getAllMarkers() {

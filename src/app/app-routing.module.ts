@@ -28,7 +28,7 @@ const routes: Routes = [
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: 'liste-messages',
+      path: 'liste-messages/:location',
     loadChildren: () => import('./liste-messages/liste-messages.module').then(m => m.ListeMessagesPageModule)
   },
     {
