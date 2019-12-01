@@ -181,6 +181,16 @@ export class HomePage implements OnInit {
         });
 
         await alert.present();
+        presentToast();
+
+        async function presentToast() {
+            const toast = document.createElement('ion-toast');
+            toast.message = 'Message ajouté !';
+            toast.duration = 1000;
+
+            document.body.appendChild(toast);
+            return toast.present();
+        }
     }
 
     async marquerLieu() {
@@ -189,6 +199,16 @@ export class HomePage implements OnInit {
             that.addMarker(location, 'blue');
             that.saveMarkerPosition(location, null);
         });
+        presentToast();
+
+        async function presentToast() {
+            const toast = document.createElement('ion-toast');
+            toast.message = 'Lieu ajouté !';
+            toast.duration = 1000;
+
+            document.body.appendChild(toast);
+            return toast.present();
+        }
     }
 
     getAllMarkerUser() {

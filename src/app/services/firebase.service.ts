@@ -11,7 +11,6 @@ import {objectKeys} from "codelyzer/util/objectKeys";
 export class FirebaseService {
 
     private snapshotChangesSubscription: any;
-    private countLieu = 1;
 
     constructor(
         public afs: AngularFirestore,
@@ -89,12 +88,12 @@ export class FirebaseService {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
             let postData = {
-                idLieu: this.countLieu,
+                lat: value.lat,
+                lgt: value.lgt,
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
             ref.child("lieux").push(postData);
             this.createLieu(value);
-            this.countLieu++;
         })
     }
 

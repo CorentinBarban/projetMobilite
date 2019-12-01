@@ -33,6 +33,7 @@ export class ListeLieuxPersonnePage implements OnInit {
     }
 
     initFields(user, listeLieux) {
+        let i = 1;
         this.firebaseService.getUserInformation(user).then(function (infos) {
 
             document.getElementById("nom").innerHTML = infos.nom + ' ' + infos.prenom;
@@ -44,7 +45,7 @@ export class ListeLieuxPersonnePage implements OnInit {
                 for (let keyLieu of Object.keys(infos.lieux)) {
                     let lieu = infos.lieux[keyLieu];
                     listeLieux.push({
-                        id: 'Lieu ' + lieu.idLieu,
+                        count: i,
                         lat: 'Lat: ' + lieu.lat,
                         lgt: 'Lgt: ' + lieu.lgt,
                         horodatage: lieu.horodatage,

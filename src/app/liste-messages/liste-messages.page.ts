@@ -47,6 +47,7 @@ export class ListeMessagesPage implements OnInit {
                     that.idLieu = key;
                     console.log(that.idLieu);
                     if (lieu.messages != undefined) {
+                        document.getElementById("vide").innerHTML = null;
                         for (let keyLieu of Object.keys(lieu.messages)) {
                             let message = lieu.messages[keyLieu];
                             items.push({
@@ -55,7 +56,7 @@ export class ListeMessagesPage implements OnInit {
                             })
                         }
                     }
-                    console.log('NOPE')
+                    document.getElementById("vide").innerHTML = "Aucun message n'a été déposé pour le moment.";
                 }
             }
         });
@@ -97,6 +98,16 @@ export class ListeMessagesPage implements OnInit {
         });
 
         await alert.present();
+        presentToast();
+
+        async function presentToast() {
+            const toast = document.createElement('ion-toast');
+            toast.message = 'Message ajouté !';
+            toast.duration = 1000;
+
+            document.body.appendChild(toast);
+            return toast.present();
+        }
     }
 
 }
