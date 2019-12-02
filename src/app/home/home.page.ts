@@ -13,9 +13,11 @@ import { //Import des plugins GoogleMaps nécessaires
     LatLng
 } from '@ionic-native/google-maps';
 
+
 import {Geolocation} from '@ionic-native/geolocation';
 import {TimeInterval} from "rxjs";
 import {Router} from "@angular/router";
+import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 
 @Component({
     selector: 'app-home',
@@ -38,9 +40,15 @@ export class HomePage implements OnInit {
         private platform: Platform,
         public navCtrl: NavController,
         public firebaseService: FirebaseService,
-        public router: Router
+        public router: Router,
+        private androidPermissions: AndroidPermissions
     ) {
+        /*this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+            result => console.log('Has permission?',result.hasPermission),
+            err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
+        );
 
+        this.androidPermissions.requestPermissions(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);*/
     }
 
     async ngOnInit() {
@@ -67,12 +75,11 @@ export class HomePage implements OnInit {
      * Obtenir ca position actuelle
      */
     async getPosition() {
-        this.map.setOptions({zoomControl: false});
+        //GoogleMaps.setOptions({zoomControl: 'true'});
         this.loading = await this.loadingCtrl.create({
             message: 'Patientez...'
         });
         await this.loading.present();
-
         // Récupération de la géolocalisation
         this.map.getMyLocation().then((location: MyLocation) => {
             this.loading.dismiss();
@@ -83,7 +90,6 @@ export class HomePage implements OnInit {
                 zoom: 18,
                 tilt: 30
             });
-
             // Ajout d'un marker
             let marker: Marker = this.map.addMarkerSync({
                 title: 'Position',
@@ -92,7 +98,6 @@ export class HomePage implements OnInit {
                 position: location.latLng,
                 animation: GoogleMapsAnimation.BOUNCE
             });
-
             marker.showInfoWindow();
         });
     }
@@ -101,29 +106,17 @@ export class HomePage implements OnInit {
      * Ajouter un marker
      * @param location
      */
+
     addMarker(location, color) {
+        let date = new Date(location.heure);
         let marker: Marker = this.map.addMarkerSync({
             position: location.latLng,
-            label: this.labels[this.labelIndex++ % this.labels.length],
+            title: 'Lieu taggé',
+            snippet: date.toString(),
             animation: GoogleMapsAnimation.BOUNCE,
             icon: color
         });
-
-        this.createMarkerListener(marker);
-    }
-
-    addMarkerAvecHeure(location, color, heure) {
-
-        let marker: Marker = this.map.addMarkerSync({
-            position: location.latLng,
-            label: this.labels[this.labelIndex++ % this.labels.length],
-            animation: GoogleMapsAnimation.BOUNCE,
-            icon: color,
-            title: 'Horodatage : ' + heure,
-            snippet: 'Nombre de messages déposés : '
-        });
-
-        this.createMarkerListener(marker);
+        this.createMarkerListener(marker, location);
     }
 
     /**
@@ -131,15 +124,14 @@ export class HomePage implements OnInit {
      * @param location
      * @param message
      */
-    saveMarkerPosition(location, message) {
 
+    saveMarkerPosition(location, message) {
         let value = {
             lat: location.latLng.lat,
             lgt: location.latLng.lng,
             date: location.time,
             msg: message
         };
-
         this.firebaseService.createUserPosition(value);
     }
 
@@ -196,6 +188,7 @@ export class HomePage implements OnInit {
     async marquerLieu() {
         let that = this;
         this.map.getMyLocation().then((location: MyLocation) => {
+            console.log("Stockage du lieu : " + location);
             that.addMarker(location, 'blue');
             that.saveMarkerPosition(location, null);
         });
@@ -211,6 +204,9 @@ export class HomePage implements OnInit {
         }
     }
 
+    /**
+     *
+     */
     getAllMarkerUser() {
         let that = this;
         this.firebaseService.getAllMarkerForCurrentUser().then(function (lieux) {
@@ -222,18 +218,21 @@ export class HomePage implements OnInit {
                         'lng': lieu.lgt
                     }
                 };
-                that.addMarker(position, 'blue')
+                let heure = lieu.horodatage;
+                that.addMarker(position, 'blue');
             }
         });
     }
 
-    createMarkerListener(marker) {
+    async createMarkerListener(marker, location) {
+        let that = this;
         marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
             let loc = marker.get('position');
             console.log("Envoi location marker : " + loc);
             let location = loc.lat + '&' + loc.lng;
             this.router.navigate(['/liste-messages', location]);
         })
+        marker.showInfoWindow();
     }
 
     getAllMarkers() {
@@ -242,15 +241,14 @@ export class HomePage implements OnInit {
             for (let key of Object.keys(lieux)) {
                 console.log(key);
                 let lieu = lieux[key];
-                let heure = lieu.horodatage;
                 let position = {
                     'latLng': {
                         'lat': lieu.lat,
                         'lng': lieu.lgt
-                    }
+                    },
+                    'heure': lieu.horodatage
                 };
-                let timestamp = heure;
-                that.addMarkerAvecHeure(position, 'green', timestamp);
+                that.addMarker(position, 'green');
             }
         });
     }

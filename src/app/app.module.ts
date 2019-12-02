@@ -17,6 +17,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 
 @NgModule({
     declarations: [AppComponent],
@@ -35,6 +36,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     providers: [
         StatusBar,
         SplashScreen,
+        AndroidPermissions,
         { provide: FirestoreSettingsToken, useValue: {} },
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],

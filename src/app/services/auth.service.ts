@@ -17,15 +17,12 @@ export class AuthService {
     }
 
     doRegister(value) {
+        var that = this;
+        console.log('doregister :' + value);
         return new Promise<any>((resolve, reject) => {
             firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
                 .then(function(user) {
-                    firebase.auth().currentUser.updateProfile({
-                        displayName: value.nom,
-                        photoURL: 'https://example.com/jane-q-user/profile.jpg'
-                    });
-
-                    this.updateInformation(value);
+                    that.updateInformation(value);
                 });
         });
     }
@@ -33,7 +30,7 @@ export class AuthService {
     updateInformation(value){
         let postData = {
             prenom: value.prenom,
-            nom : value.nom ,
+            nom: value.nom,
             email: value.email,
             url: value.url
         };

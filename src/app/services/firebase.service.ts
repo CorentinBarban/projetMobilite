@@ -90,6 +90,7 @@ export class FirebaseService {
             let postData = {
                 lat: value.lat,
                 lgt: value.lgt,
+                horodatage: value.date
             };
             let ref = firebase.database().ref("/users/"+ currentUser.uid);
             ref.child("lieux").push(postData);
