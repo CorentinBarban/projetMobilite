@@ -43,6 +43,7 @@ export class ListeMessagesPage implements OnInit {
             for (let key of Object.keys(lieux)) {
                 let lieu = lieux[key];
                 //console.log(Math.round(lieu.lat * 100) / 100 + ' ' + Math.round(that.lat * 100) / 100 + ' ' + Math.round(lieu.lgt * 100) / 100 + ' ' + Math.round(that.lng * 100) / 100); // Il faut arrondir la valeur
+                //if (Math.round(lieu.lat * 100) / 100 == Math.round(that.lat * 100) / 100 && Math.round(lieu.lgt * 100) / 100 == Math.round(that.lng * 100) / 100) {
                 if (Math.round(lieu.lat * 100) / 100 == Math.round(that.lat * 100) / 100 && Math.round(lieu.lgt * 100) / 100 == Math.round(that.lng * 100) / 100) {
                     that.idLieu = key;
                     console.log(that.idLieu);
@@ -51,12 +52,13 @@ export class ListeMessagesPage implements OnInit {
                         for (let keyLieu of Object.keys(lieu.messages)) {
                             let message = lieu.messages[keyLieu];
                             items.push({
-                                message: message.message,
+                                message: message,
                                 icon: 'mail'
                             })
                         }
+                    } else {
+                        document.getElementById("vide").innerHTML = "Aucun message n'a été déposé pour le moment.";
                     }
-                    document.getElementById("vide").innerHTML = "Aucun message n'a été déposé pour le moment.";
                 }
             }
         });
@@ -88,10 +90,7 @@ export class ListeMessagesPage implements OnInit {
                         let that = this;
                         that.firebaseService.createMessage(messageData, that.idLieu);
                         that.firebaseService.addMessageToLieu(messageData, that.idLieu);
-                        console.log(messageData);
-                        console.log(messageData.msg);
                         this.goBack();
-                        //RAJOUTER LE MESSAGE DANS LE LIEU OU ALORS CHERCHER LES MESSAGES SELON L'ID DU LIEU
                     }
                 }
             ]

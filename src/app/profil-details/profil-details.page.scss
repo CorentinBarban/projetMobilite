@@ -12,15 +12,24 @@
   padding-top: 10px;
 }
 
-.inputfile {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
+.informations {
+  padding-top: 10px;
+  text-align: center;
 }
 
-.idImage{
-  display: none;
+.informations #nom {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.informations #email {
+  font-size: 15px;
+  color: #86888f;
+  font-style: italic;
+}
+
+.informations #button {
+  height: 65px;
+  width: 250px;
+  padding-top: 30px;
 }

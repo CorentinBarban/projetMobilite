@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {MenuController} from '@ionic/angular';
 import {AuthService} from '../services/auth.service';
 import {FirebaseService} from '../services/firebase.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {AngularFireStorage} from '@angular/fire/storage';
+import {AngularFireAuth} from "@angular/fire/auth";
 
 export interface Image {
     id: string;
@@ -19,12 +20,12 @@ export interface Image {
     styleUrls: ['./profil-details.page.scss'],
 })
 export class ProfilDetailsPage implements OnInit {
-
+    idPersonne;
+    nom;
+    prenom;
+    email;
+    url;
     validationsForm: FormGroup;
-    urlImage: String="/assets/images/add.png";
-    newImage: Image = {
-        id: this.afs.createId(), image: ''
-    }
     loading: boolean = false;
 
     constructor(
@@ -35,31 +36,17 @@ export class ProfilDetailsPage implements OnInit {
         private router: Router,
         private formBuilder: FormBuilder,
         private afs: AngularFirestore,
-        private storage: AngularFireStorage
+        private storage: AngularFireStorage,
+        private activatedRoute: ActivatedRoute,
+        public afAuth: AngularFireAuth
     ) {
+        this.activatedRoute.params.subscribe((res) => {
+            this.idPersonne = res['id'];
+        });
     }
 
     ngOnInit() {
         this.initField();
-        this.validationsForm = this.formBuilder.group({
-            url: new FormControl('', Validators.compose([
-                Validators.required
-            ])),
-            nom: new FormControl('', Validators.compose([
-                Validators.required
-            ])),
-            prenom: new FormControl('', Validators.compose([
-                Validators.required
-            ])),
-            email: new FormControl('', Validators.compose([
-                Validators.required,
-                Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-            ])),
-            password: new FormControl('', Validators.compose([
-                Validators.minLength(5),
-                Validators.required
-            ])),
-        });
     }
 
     ionViewWillEnter() {
@@ -71,10 +58,10 @@ export class ProfilDetailsPage implements OnInit {
     }
 
     logOut() {
+        let that = this;
         presentToast();
         this.authService.doLogout().then(function () {
-
-            this.router.navigate(['/login']);
+            that.router.navigate(['/login']);
         });
 
         async function presentToast() {
@@ -87,71 +74,23 @@ export class ProfilDetailsPage implements OnInit {
         }
     }
 
-    uploadImage(event) {
-        this.loading = true;
-        if (event.target.files && event.target.files[0]) {
-            var reader = new FileReader();
-
-            reader.readAsDataURL(event.target.files[0]);
-            // For Preview Of Image
-            reader.onload = (e:any) => { // called once readAsDataURL is completed
-                this.urlImage = e.target.result;
-
-                // For Uploading Image To Firebase
-                const fileraw = event.target.files[0];
-                console.log(this.newImage.id);
-                const filePath = '/Image/'+ this.newImage.id + '/'+ this.newImage.id;
-                const result = this.SaveImageRef(filePath, fileraw);
-                const ref = result.ref;
-                result.task.then(a => {
-                    ref.getDownloadURL().subscribe(a => {
-                        console.log(a);
-                        this.validationsForm.get('url').setValue(a);
-                        this.newImage.image = a;
-                        this.loading = false;
-                    });
-
-                    this.afs.collection('Image').doc(this.newImage.id).set(this.newImage);
-                });
-            }, error => {
-                alert("Error");
-            }
-
-        }
-    }
-
-    SaveImageRef(filePath, file) {
-
-        return {
-            task: this.storage.upload(filePath, file)
-            , ref: this.storage.ref(filePath)
-        };
-    }
-
     initField() {
         let that = this;
-        this.fireService.getCurrentUserInformation().then(function (value) {
-            that.validationsForm.get('nom').setValue(value.nom);
-            that.validationsForm.get('prenom').setValue(value.prenom);
-            that.validationsForm.get('email').setValue(value.email);
-            that.urlImage = value.url;
-            that.validationsForm.get('url').setValue(value.url);
+        this.fireService.getUserInformation(this.idPersonne).then(function (value) {
+            that.nom = value.nom;
+            that.prenom = value.prenom;
+            that.email = value.email;
+            that.url = value.url;
         });
-
     }
 
-    updateInformation(value) {
-        presentToast();
-        this.authService.updateInformation(value);
-        this.goBack();
-
-        async function presentToast() {
-            const toast = document.createElement('ion-toast');
-            toast.message = 'Mis à jour';
-            toast.duration = 1000;
-
-            document.body.appendChild(toast);
-            return toast.present();
-        }
+    editer() {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    this.router.navigate(['/profil-details-editer', currentUser.uid]);
+                }
+            });
+        });
     }
 }

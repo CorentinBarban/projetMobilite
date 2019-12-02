@@ -16,7 +16,6 @@ export class FirebaseService {
         public afs: AngularFirestore,
         public afAuth: AngularFireAuth,
     ) {
-
     }
 
     getCurrentUserInformation() {

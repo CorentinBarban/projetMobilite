@@ -1,0 +1,58 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button shape="round" (click)="goBack()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Edition du profil</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form class="form" [formGroup]="validationsForm" (ngSubmit)="updateInformation(validationsForm.value)">
+        <div class="login-box">
+            <div class="photo-personne">
+                <input (change)="uploadImage($event)" type="file" name="file" id="file" class="inputfile"
+                       accept="image/*">
+                <label for="file">
+                    <ion-avatar class="profile-photo">
+                        <img [src]="urlImage">
+                    </ion-avatar>
+                </label>
+            </div>
+            <ion-row>
+                <ion-col>
+                    <ion-list inset>
+                        <ion-item class="idImage">
+                            <ion-input type="text" formControlName="url"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating" color="primary">Nom</ion-label>
+                            <ion-input type="text" name="nom" formControlName="nom" required></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating" color="primary">Prénom</ion-label>
+                            <ion-input type="text" name="prenom" formControlName="prenom" required></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating" color="primary">Email</ion-label>
+                            <ion-input type="text" name="email" formControlName="email" required></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating" color="primary">Mot de passe</ion-label>
+                            <ion-input type="password" name="password" required></ion-input>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col class="signup-col ion-text-center">
+                    <ion-button type="submit" expand="block">Sauvegarder
+                        <ion-ripple-effect type="bounded"></ion-ripple-effect>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </div>
+    </form>
+</ion-content>

@@ -12,7 +12,7 @@ import {FirebaseDatabase} from "@angular/fire/firebase.app.module";
 })
 export class ListeLieuxPersonnePage implements OnInit {
     private selectedItem: any;
-    public listeLieux: Array<{ id: string; lat: string; lgt: string; icon: string; horodatage: string; }> = [];
+    public listeLieux: Array<{ id: string; lat: string; lgt: string; icon: string; horodatage: string; count; }> = [];
     private idPersonne;
     private email;
     private nom;

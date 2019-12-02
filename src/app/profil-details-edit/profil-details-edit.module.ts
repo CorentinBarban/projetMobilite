@@ -2,8 +2,8 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
-import {ProfilDetailsPageRoutingModule} from './profil-details-routing.module';
-import {ProfilDetailsPage} from "./profil-details.page";
+import {ProfilDetailsEditPageRoutingModule} from './profil-details-edit-routing.module';
+import {ProfilDetailsEditPage} from "./profil-details-edit.page";
 
 @NgModule({
     imports: [
@@ -11,9 +11,9 @@ import {ProfilDetailsPage} from "./profil-details.page";
         FormsModule,
         IonicModule,
         ReactiveFormsModule,
-        ProfilDetailsPageRoutingModule
+        ProfilDetailsEditPageRoutingModule
     ],
-    declarations: [ProfilDetailsPage]
+    declarations: [ProfilDetailsEditPage]
 })
-export class ProfilDetailsPageModule {
+export class ProfilDetailsEditPageModule {
 }

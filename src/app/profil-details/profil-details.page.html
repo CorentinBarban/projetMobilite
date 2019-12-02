@@ -7,54 +7,27 @@
         </ion-buttons>
         <ion-title>Mon compte</ion-title>
         <ion-buttons slot="end">
-            <ion-button shape="round" (click)="logOut()">
-                <ion-icon name="log-out"></ion-icon>
+            <ion-button shape="round" (click)="editer()">
+                <ion-icon name="create"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <form class="form" [formGroup]="validationsForm" (ngSubmit)="updateInformation(validationsForm.value)">
-        <div class="login-box">
-            <div class="photo-personne">
-                <input (change)="uploadImage($event)" type="file" name="file" id="file" class="inputfile" accept="image/*">
-                <label for="file"><ion-avatar class="profile-photo">
-                    <img [src]="urlImage">
-                </ion-avatar></label>
-            </div>
-            <ion-row>
-                <ion-col>
-                    <ion-list inset>
-                        <ion-item class="idImage">
-                            <ion-input type="text" formControlName="url"></ion-input>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating" color="primary">Nom</ion-label>
-                            <ion-input type="text" name="nom" formControlName="nom" required></ion-input>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating" color="primary">Prénom</ion-label>
-                            <ion-input type="text" name="prenom" formControlName="prenom" required></ion-input>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating" color="primary">Email</ion-label>
-                            <ion-input type="text" name="email" formControlName="email" required></ion-input>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label position="floating" color="primary">Mot de passe</ion-label>
-                            <ion-input type="password" name="password" required></ion-input>
-                        </ion-item>
-                    </ion-list>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col class="signup-col ion-text-center">
-                    <ion-button type="submit" expand="block">Sauvegarder
-                        <ion-ripple-effect type="bounded"></ion-ripple-effect>
-                    </ion-button>
-                </ion-col>
-            </ion-row>
+    <div class="login-box">
+        <div class="photo-personne">
+            <ion-avatar class="profile-photo">
+                <img [src]="url">
+            </ion-avatar>
         </div>
-    </form>
+        <div class="informations">
+            <ion-label id="nom">{{nom}} {{prenom}}</ion-label>
+            <br/>
+            <ion-label id="email">{{email}}</ion-label>
+            <ion-button id="button" (click)="logOut()">Déconnexion
+                <ion-ripple-effect type="bounded"></ion-ripple-effect>
+            </ion-button>
+        </div>
+    </div>
 </ion-content>

@@ -18,6 +18,7 @@ import {Geolocation} from '@ionic-native/geolocation';
 import {TimeInterval} from "rxjs";
 import {Router} from "@angular/router";
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
+import {AngularFireAuth} from "@angular/fire/auth";
 
 @Component({
     selector: 'app-home',
@@ -41,7 +42,8 @@ export class HomePage implements OnInit {
         public navCtrl: NavController,
         public firebaseService: FirebaseService,
         public router: Router,
-        private androidPermissions: AndroidPermissions
+        private androidPermissions: AndroidPermissions,
+        public afAuth: AngularFireAuth,
     ) {
         /*this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
             result => console.log('Has permission?',result.hasPermission),
@@ -108,7 +110,8 @@ export class HomePage implements OnInit {
      */
 
     addMarker(location, color) {
-        let date = new Date(location.heure);
+        let date = new Date(location.heure * 1000);
+        console.log(location.heure);
         let marker: Marker = this.map.addMarkerSync({
             position: location.latLng,
             title: 'Lieu taggé',
@@ -173,7 +176,8 @@ export class HomePage implements OnInit {
         });
 
         await alert.present();
-        presentToast();
+
+        //presentToast();
 
         async function presentToast() {
             const toast = document.createElement('ion-toast');
@@ -192,7 +196,8 @@ export class HomePage implements OnInit {
             that.addMarker(location, 'blue');
             that.saveMarkerPosition(location, null);
         });
-        presentToast();
+
+        //presentToast();
 
         async function presentToast() {
             const toast = document.createElement('ion-toast');
@@ -216,9 +221,9 @@ export class HomePage implements OnInit {
                     'latLng': {
                         'lat': lieu.lat,
                         'lng': lieu.lgt
-                    }
+                    },
+                    'heure': lieu.horodatage
                 };
-                let heure = lieu.horodatage;
                 that.addMarker(position, 'blue');
             }
         });
@@ -229,9 +234,9 @@ export class HomePage implements OnInit {
         marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
             let loc = marker.get('position');
             console.log("Envoi location marker : " + loc);
-            let location = loc.lat + '&' + loc.lng;
-            this.router.navigate(['/liste-messages', location]);
-        })
+            let coord = loc.lat + '&' + loc.lng;
+            this.router.navigate(['/liste-messages', coord]);
+        });
         marker.showInfoWindow();
     }
 
@@ -250,6 +255,24 @@ export class HomePage implements OnInit {
                 };
                 that.addMarker(position, 'green');
             }
+        });
+    }
+
+    chargerListePersonnes() {
+
+    }
+
+    afficherDetails(id) {
+        this.router.navigate(['/profil-details', id]);
+    }
+
+    afficherProfil() {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    this.router.navigate(['/profil-details', currentUser.uid]);
+                }
+            });
         });
     }
 }

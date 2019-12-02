@@ -20,8 +20,12 @@ const routes: Routes = [
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'profil-details',
-    loadChildren: () => import('./profil-details/profil-details.module').then( m => m.ProfilDetailsPageModule)
+    path: 'profil-details-edit/:id',
+    loadChildren: () => import('./profil-details-edit/profil-details-edit.module').then(m => m.ProfilDetailsEditPageModule)
+  },
+  {
+    path: 'profil-details/:id',
+    loadChildren: () => import('./profil-details/profil-details.module').then(m => m.ProfilDetailsPageModule)
   },
   {
     path: 'register',
