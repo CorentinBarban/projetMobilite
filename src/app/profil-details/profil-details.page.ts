@@ -21,7 +21,7 @@ export interface Image {
 export class ProfilDetailsPage implements OnInit {
 
     validationsForm: FormGroup;
-    urlImage: String="/assets/images/post-malone.jpg";
+    urlImage: String="/assets/images/add.png";
     newImage: Image = {
         id: this.afs.createId(), image: ''
     }
@@ -154,6 +154,4 @@ export class ProfilDetailsPage implements OnInit {
             return toast.present();
         }
     }
-
-
 }

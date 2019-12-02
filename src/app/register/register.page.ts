@@ -19,7 +19,7 @@ export interface Image {
 
 export class RegisterPage implements OnInit {
     validations_form: FormGroup;
-    url: string= "/assets/images/post-malone.jpg";
+    url: string= "/assets/images/add.png";
     errorMessage: string = '';
     successMessage: string = '';
     newImage: Image = {
