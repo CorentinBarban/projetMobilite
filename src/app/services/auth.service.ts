@@ -21,12 +21,27 @@ export class AuthService {
         return new Promise<any>((resolve, reject) => {
             firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
                 .then(function(user) {
-                    that.updateInformation(value);
+                    that.createUser(value);
                 });
         });
     }
 
-    updateInformation(value){
+    createUser(value) { // PROBLEME : LORS DE LA MODIFICATION, TOUT LES USERS SONT MODIFIES ET LES LIEUX SUPPRIMES
+        let postData = {
+            prenom: value.prenom,
+            nom: value.nom,
+            email: value.email,
+            url: value.url,
+            type: 'user'
+        };
+        this.afAuth.user.subscribe(currentUser => {
+            let updates = {};
+            updates['/users/' + currentUser.uid] = postData;
+            firebase.database().ref().update(updates);
+        });
+    }
+
+    updateInformation(value) { // PROBLEME : LORS DE LA MODIFICATION, TOUT LES USERS SONT MODIFIES ET LES LIEUX SUPPRIMES
         let postData = {
             prenom: value.prenom,
             nom: value.nom,

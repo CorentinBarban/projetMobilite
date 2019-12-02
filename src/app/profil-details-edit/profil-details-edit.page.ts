@@ -141,7 +141,7 @@ export class ProfilDetailsEditPage implements OnInit {
     }
 
     updateInformation(value) {
-        this.authService.updateInformation(value);
+        this.authService.updateInformation(value); // PROBLEME : LORS DE LA MODIFICATION, TOUT LES USERS SONT MODIFIES ET LES LIEUX SUPPRIMES
         presentToast();
         this.initField();
         this.goBack();
