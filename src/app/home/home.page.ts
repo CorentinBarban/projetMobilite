@@ -14,8 +14,6 @@ import { //Import des plugins GoogleMaps nécessaires
 } from '@ionic-native/google-maps';
 
 
-import {Geolocation} from '@ionic-native/geolocation';
-import {TimeInterval} from "rxjs";
 import {Router} from "@angular/router";
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 import {AngularFireAuth} from "@angular/fire/auth";
@@ -27,7 +25,7 @@ import {AngularFireAuth} from "@angular/fire/auth";
 })
 export class HomePage implements OnInit {
     map: GoogleMap; //Instance de carte
-    loading: any
+    loading: any;
     location: any;
     labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     labelIndex = 0;
@@ -142,6 +140,10 @@ export class HomePage implements OnInit {
 
     ionViewWillEnter() {
         this.menu.enable(true);
+    }
+
+    refresh() {
+        location.reload();
     }
 
     /**

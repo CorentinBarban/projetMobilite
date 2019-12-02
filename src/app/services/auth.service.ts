@@ -18,7 +18,6 @@ export class AuthService {
 
     doRegister(value) {
         var that = this;
-        console.log('doregister :' + value);
         return new Promise<any>((resolve, reject) => {
             firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
                 .then(function(user) {
@@ -32,7 +31,8 @@ export class AuthService {
             prenom: value.prenom,
             nom: value.nom,
             email: value.email,
-            url: value.url
+            url: value.url,
+            type: 'user'
         };
         this.afAuth.user.subscribe(currentUser=>{
             let updates = {};
