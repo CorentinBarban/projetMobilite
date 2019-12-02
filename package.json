@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
+    "@ionic-native/android-permissions": "^5.17.1",
     "@ionic-native/core": "^5.17.0",
     "@ionic-native/geolocation": "^5.17.0",
     "@ionic-native/google-maps": "^5.5.0",
@@ -30,6 +31,7 @@
     "@ionic/angular": "^4.7.1",
     "com.telerik.plugins.nativepagetransitions": "^0.6.5",
     "cordova-browser": "6.0.0",
+    "cordova-plugin-android-permissions": "^1.0.2",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-googlemaps": "^2.6.2",
     "cordova-plugin-nativegeocoder": "^3.2.2",
@@ -84,7 +86,8 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-geolocation": {},
       "cordova-plugin-nativegeocoder": {},
-      "com.telerik.plugins.nativepagetransitions": {}
+      "com.telerik.plugins.nativepagetransitions": {},
+      "cordova-plugin-android-permissions": {}
     },
     "platforms": [
       "browser"

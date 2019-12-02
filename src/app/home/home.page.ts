@@ -13,9 +13,11 @@ import { //Import des plugins GoogleMaps nécessaires
     LatLng
 } from '@ionic-native/google-maps';
 
+
 import {Geolocation} from '@ionic-native/geolocation';
 import {TimeInterval} from "rxjs";
 import {Router} from "@angular/router";
+import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 
 @Component({
     selector: 'app-home',
@@ -38,9 +40,15 @@ export class HomePage implements OnInit {
         private platform: Platform,
         public navCtrl: NavController,
         public firebaseService: FirebaseService,
-        public router: Router
+        public router: Router,
+        private androidPermissions: AndroidPermissions
     ) {
+        this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+            result => console.log('Has permission?',result.hasPermission),
+            err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
+        );
 
+        this.androidPermissions.requestPermissions(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
     }
 
     async ngOnInit() {
@@ -67,7 +75,7 @@ export class HomePage implements OnInit {
      * Obtenir ca position actuelle
      */
     async getPosition() {
-        this.map.setOptions({zoomControl: false});
+       //GoogleMaps.setOptions({zoomControl: 'true'});
         this.loading = await this.loadingCtrl.create({
             message: 'Patientez...'
         });
@@ -113,14 +121,14 @@ export class HomePage implements OnInit {
     }
 
     addMarkerAvecHeure(location, color, heure) {
+        let horo = new Date(heure);
 
         let marker: Marker = this.map.addMarkerSync({
             position: location.latLng,
             label: this.labels[this.labelIndex++ % this.labels.length],
             animation: GoogleMapsAnimation.BOUNCE,
             icon: color,
-            title: 'Horodatage : ' + heure,
-            snippet: 'Nombre de messages déposés : '
+            title: 'Horodatage : ' + horo,
         });
 
         this.createMarkerListener(marker);
@@ -211,6 +219,9 @@ export class HomePage implements OnInit {
         }
     }
 
+    /**
+     *
+     */
     getAllMarkerUser() {
         let that = this;
         this.firebaseService.getAllMarkerForCurrentUser().then(function (lieux) {
@@ -249,8 +260,7 @@ export class HomePage implements OnInit {
                         'lng': lieu.lgt
                     }
                 };
-                let timestamp = heure;
-                that.addMarkerAvecHeure(position, 'green', timestamp);
+                that.addMarker(position, 'green');
             }
         });
     }
