@@ -48,11 +48,12 @@ export class ListeMessagesPage implements OnInit {
                     that.idLieu = key;
                     console.log(that.idLieu);
                     if (lieu.messages != undefined) {
-                        document.getElementById("vide").innerHTML = null;
+                        document.getElementById("vide").innerHTML = "";
                         for (let keyLieu of Object.keys(lieu.messages)) {
                             let message = lieu.messages[keyLieu];
+                            console.log('Ajout du message : ' + message.message);
                             items.push({
-                                message: message,
+                                message: message.message,
                                 icon: 'mail'
                             })
                         }

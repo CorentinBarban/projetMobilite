@@ -60,11 +60,7 @@ export class ProfilDetailsEditPage implements OnInit {
             email: new FormControl('', Validators.compose([
                 Validators.required,
                 Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-            ])),
-            password: new FormControl('', Validators.compose([
-                Validators.minLength(5),
-                Validators.required
-            ])),
+            ]))
         });
     }
 
@@ -146,6 +142,17 @@ export class ProfilDetailsEditPage implements OnInit {
 
     updateInformation(value) {
         this.authService.updateInformation(value);
+        presentToast();
         this.initField();
+        this.goBack();
+
+        async function presentToast() {
+            const toast = document.createElement('ion-toast');
+            toast.message = 'Mis à jour';
+            toast.duration = 1000;
+
+            document.body.appendChild(toast);
+            return toast.present();
+        }
     }
 }

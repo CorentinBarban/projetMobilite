@@ -28,8 +28,6 @@ export class ListePersonnesLieuPage implements OnInit {
 
     async ngOnInit() {
         await this.getPosition();
-        console.log('Affichage liste id :' + this.listePersonnesId[0]);
-        console.log('Affichage personnes :' + this.listePersonnes);
     }
 
     getPosition() {
@@ -66,7 +64,7 @@ export class ListePersonnesLieuPage implements OnInit {
     getUsers() {
         var that = this;
         console.log('Get Users :');
-        for (var i = 0; i < this.listePersonnesId.length; i++) {
+        for (var i = 0; i < this.listePersonnesId.length; i += i + 1) {
             let personne = that.listePersonnesId[i];
             console.log('Perseo : ' + that.listePersonnesId[i]);
             this.firebaseService.getUserInformation(personne).then(function (infos) {

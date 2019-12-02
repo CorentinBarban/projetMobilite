@@ -31,6 +31,7 @@ export class HomePage implements OnInit {
     location: any;
     labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     labelIndex = 0;
+    public items: Array<{ id: string; nom: string; icon: string }> = [];
 
     constructor(
         public menu: MenuController,
@@ -54,6 +55,7 @@ export class HomePage implements OnInit {
     }
 
     async ngOnInit() {
+        this.chargerListePersonnes();
         await this.platform.ready();
         await this.loadMap();
         await this.getAllMarkers();
@@ -146,6 +148,7 @@ export class HomePage implements OnInit {
      * Ouvrir la pop-up pour laisser un message sur un lieu
      * @returns {Promise<void>}
      */
+
     async presentMessageEvent() {
         const alert = await this.alertController.create({
             header: 'Ecrire un message',
@@ -167,8 +170,12 @@ export class HomePage implements OnInit {
                     handler: (messageData) => {
                         let that = this;
                         this.map.getMyLocation().then((location: MyLocation) => {
-                            that.addMarker(location, 'blue');
-                            that.saveMarkerPosition(location, messageData.message);
+                            let position = {
+                                'latLng': location.latLng,
+                                'heure': location.time
+                            };
+                            that.addMarker(position, 'blue');
+                            that.saveMarkerPosition(position, null);
                         });
                     }
                 }
@@ -176,37 +183,19 @@ export class HomePage implements OnInit {
         });
 
         await alert.present();
-
-        //presentToast();
-
-        async function presentToast() {
-            const toast = document.createElement('ion-toast');
-            toast.message = 'Message ajouté !';
-            toast.duration = 1000;
-
-            document.body.appendChild(toast);
-            return toast.present();
-        }
     }
 
     async marquerLieu() {
         let that = this;
         this.map.getMyLocation().then((location: MyLocation) => {
-            console.log("Stockage du lieu : " + location);
-            that.addMarker(location, 'blue');
-            that.saveMarkerPosition(location, null);
+            console.log("Stockage du lieu : " + location.time);
+            let position = {
+                'latLng': location.latLng,
+                'heure': location.time
+            };
+            that.addMarker(position, 'blue');
+            that.saveMarkerPosition(position, null);
         });
-
-        //presentToast();
-
-        async function presentToast() {
-            const toast = document.createElement('ion-toast');
-            toast.message = 'Lieu ajouté !';
-            toast.duration = 1000;
-
-            document.body.appendChild(toast);
-            return toast.present();
-        }
     }
 
     /**
@@ -259,11 +248,46 @@ export class HomePage implements OnInit {
     }
 
     chargerListePersonnes() {
+        document.getElementById("liste-personnes").style.display = "none";
+        let that = this;
+        this.firebaseService.getAllUsers().then(function (personnes) {
+            for (let key of Object.keys(personnes)) {
+                let personne = personnes[key];
+                that.items.push({
+                    id: key,
+                    nom: personne.nom + ' ' + personne.prenom,
+                    icon: 'contact'
+                });
+                console.log('Item ' + key + ' ajouté');
+            }
+        });
 
+        const searchbar = document.getElementById("searchbar");
+        const items = Array.from(document.getElementById("liste-personnes").children);
+        searchbar.addEventListener('ionInput', handleInput);
+
+        function handleInput(event) {
+            document.getElementById("map_canvas").style.display = "none";
+            document.getElementById("liste-personnes").style.display = "contents";
+            const query = event.target.value.toLowerCase();
+            requestAnimationFrame(() => {
+                items.forEach(item => {
+                    const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
+                    let value = item as HTMLElement;
+                    value.style.display = shouldShow ? 'block' : 'none';
+                });
+            });
+        }
     }
 
     afficherDetails(id) {
         this.router.navigate(['/profil-details', id]);
+    }
+
+    onCancel() {
+        console.log('cancel tmtc');
+        document.getElementById("map_canvas").style.display = "contents";
+        document.getElementById("liste-personnes").style.display = "none";
     }
 
     afficherProfil() {

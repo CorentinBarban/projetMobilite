@@ -42,11 +42,16 @@ export class ProfilDetailsPage implements OnInit {
     ) {
         this.activatedRoute.params.subscribe((res) => {
             this.idPersonne = res['id'];
+            this.initField();
         });
     }
 
     ngOnInit() {
-        this.initField();
+        this.afAuth.user.subscribe(currentUser => {
+            if (currentUser.uid != this.idPersonne) {
+                document.getElementById("bouton-edit").style.display = "none";
+            }
+        });
     }
 
     ionViewWillEnter() {
@@ -88,7 +93,7 @@ export class ProfilDetailsPage implements OnInit {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
                 if (currentUser) {
-                    this.router.navigate(['/profil-details-editer', currentUser.uid]);
+                    this.router.navigate(['/profil-details-edit', currentUser.uid]);
                 }
             });
         });
