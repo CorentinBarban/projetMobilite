@@ -32,17 +32,20 @@ const routes: Routes = [
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
   {
-      path: 'liste-messages/:location',
+    path: 'liste-messages/:location',
     loadChildren: () => import('./liste-messages/liste-messages.module').then(m => m.ListeMessagesPageModule)
   },
-    {
-        path: 'liste-personnes',
-        loadChildren: () => import('./liste-personnes-fragment/liste-personnes.module').then(m => m.ListePersonnesPageModule)
-    },
-    {
-        path: 'liste-lieux',
-        loadChildren: () => import('./liste-lieux-fragment/liste-lieux.module').then(m => m.ListeLieuxPageModule)
-    }
+  {
+    path: 'liste-personnes',
+    loadChildren: () => import('./liste-personnes-fragment/liste-personnes.module').then(m => m.ListePersonnesPageModule)
+  },
+  {
+    path: 'liste-lieux',
+    loadChildren: () => import('./liste-lieux-fragment/liste-lieux.module').then(m => m.ListeLieuxPageModule)
+  }, {
+    path: 'calendrier',
+    loadChildren: () => import('./calendrier/calendrier.module').then(m => m.CalendrierPageModule)
+  }
 ];
 
 @NgModule({

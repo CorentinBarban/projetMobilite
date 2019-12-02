@@ -3,7 +3,6 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {objectKeys} from "codelyzer/util/objectKeys";
 
 @Injectable({
     providedIn: 'root'
@@ -68,20 +67,8 @@ export class FirebaseService {
     }
 
     unsubscribeOnLogOut() {
-        //remember to unsubscribe from the snapshotChanges
         this.snapshotChangesSubscription.unsubscribe();
     }
-
-    // updateTask(taskKey, value) {
-    //     return new Promise<any>((resolve, reject) => {
-    //         let currentUser = firebase.auth().currentUser;
-    //         this.afs.collection('people').doc(currentUser.uid).collection('tasks').doc(taskKey).set(value)
-    //             .then(
-    //                 res => resolve(res),
-    //                 err => reject(err)
-    //             )
-    //     })
-    // }
 
     createUserPosition(value) {
         return new Promise<any>((resolve, reject) => {
@@ -110,7 +97,7 @@ export class FirebaseService {
             let ref = firebase.database().ref("/lieux/");
             let key = ref.push(postData);
             this.createMessage(value, key.key);
-        })
+        });
     }
 
     createMessage(value, uniqueID) {
@@ -122,6 +109,23 @@ export class FirebaseService {
                 idLieu: uniqueID
             };
             let ref = firebase.database().ref("/messages/");
+            ref.push(postData);
+        });
+    }
+
+    createEvent(value) {
+        return new Promise<any>((resolve, reject) => {
+            let currentUser = firebase.auth().currentUser;
+            let postData = {
+                title: value.title,
+                description: value.description,
+                url: value.url,
+                startTime: value.startTime,
+                endTime: value.endTime,
+                lat: value.lat,
+                lgt: value.lgt
+            };
+            let ref = firebase.database().ref("/evenements/");
             ref.push(postData);
         })
     }
@@ -136,7 +140,6 @@ export class FirebaseService {
             ref.child("messages").push(postData);
         })
     }
-
 
     getAllMarkerForCurrentUser(){
         return new Promise<any>((resolve, reject) => {
@@ -163,35 +166,4 @@ export class FirebaseService {
             });
         });
     }
-
-    // encodeImageUri(imageUri, callback) {
-    //     var c = document.createElement('canvas');
-    //     var ctx = c.getContext('2d');
-    //     var img = new Image();
-    //     img.onload = function () {
-    //         var aux: any = this;
-    //         c.width = aux.width;
-    //         c.height = aux.height;
-    //         ctx.drawImage(img, 0, 0);
-    //         var dataURL = c.toDataURL('image/jpeg');
-    //         callback(dataURL);
-    //     };
-    //     img.src = imageUri;
-    // };
-    //
-    // uploadImage(imageURI, randomId) {
-    //     return new Promise<any>((resolve, reject) => {
-    //         let storageRef = firebase.storage().ref();
-    //         let imageRef = storageRef.child('image').child(randomId);
-    //         this.encodeImageUri(imageURI, function (image64) {
-    //             imageRef.putString(image64, 'data_url')
-    //                 .then(snapshot => {
-    //                     snapshot.ref.getDownloadURL()
-    //                         .then(res => resolve(res))
-    //                 }, err => {
-    //                     reject(err);
-    //                 })
-    //         })
-    //     })
-    // }
 }

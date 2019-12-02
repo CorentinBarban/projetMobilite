@@ -49,7 +49,6 @@ export class AppComponent {
                     this.firebaseService.getUserInformation(user.uid).then(function (infos) {
                         for (let key of Object.keys(infos)) {
                             if (infos.type == 'moderator') {
-                                console.log('Salut modo');
                                 that.appPages = [
                                     {
                                         title: 'Accueil',
@@ -57,12 +56,17 @@ export class AppComponent {
                                         icon: 'home'
                                     },
                                     {
-                                        title: 'Interface modérateur',
+                                        title: 'Lieux/Personnes',
                                         url: '/vue-moderateur/liste-lieux',
-                                        icon: 'lock'
-                                    }];
+                                        icon: 'compass'
+                                    },
+                                    {
+                                        title: 'Créer un évènement',
+                                        url: '/calendrier',
+                                        icon: 'calendar'
+                                    }
+                                ];
                             } else {
-                                console.log('noob');
                                 that.appPages = [
                                     {
                                         title: 'Accueil',

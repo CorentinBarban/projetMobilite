@@ -228,7 +228,6 @@ export class HomePage implements OnInit {
             let coord = loc.lat + '&' + loc.lng;
             this.router.navigate(['/liste-messages', coord]);
         });
-        marker.showInfoWindow();
     }
 
     getAllMarkers() {
