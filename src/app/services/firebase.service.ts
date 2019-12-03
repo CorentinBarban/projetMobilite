@@ -90,13 +90,14 @@ export class FirebaseService {
             let postData = {
                 lat: value.lat,
                 lgt: value.lgt,
+                'messages': {},
                 horodatage: value.date,
-                'messages': {'message': value.msg},
                 idUser: currentUser.uid
             };
             let ref = firebase.database().ref("/lieux/");
             let key = ref.push(postData);
             this.createMessage(value, key.key);
+            this.addMessageToLieu(value, key.key);
         });
     }
 
@@ -137,7 +138,7 @@ export class FirebaseService {
                 message: value.msg
             };
             let ref = firebase.database().ref("/lieux/" + idLieu);
-            ref.child("messages").push(postData);
+            ref.child('messages').push(postData.message);
         })
     }
 

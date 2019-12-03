@@ -29,6 +29,7 @@ export class HomePage implements OnInit {
     location: any;
     labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     labelIndex = 0;
+    marker: Marker;
     public items: Array<{ id: string; nom: string; icon: string }> = [];
 
     constructor(
@@ -77,7 +78,8 @@ export class HomePage implements OnInit {
      * Obtenir ca position actuelle
      */
     async getPosition() {
-        //GoogleMaps.setOptions({zoomControl: 'true'});
+        this.marker = null;
+        this.map.setOptions({zoomControl: 'true'});
         this.loading = await this.loadingCtrl.create({
             message: 'Patientez...'
         });
@@ -93,14 +95,14 @@ export class HomePage implements OnInit {
                 tilt: 30
             });
             // Ajout d'un marker
-            let marker: Marker = this.map.addMarkerSync({
+            this.marker = this.map.addMarkerSync({
                 title: 'Position',
                 snippet: 'Vous êtes ici !',
                 icon: 'red',
                 position: location.latLng,
                 animation: GoogleMapsAnimation.BOUNCE
             });
-            marker.showInfoWindow();
+            this.marker.showInfoWindow();
         });
     }
 
@@ -143,7 +145,9 @@ export class HomePage implements OnInit {
     }
 
     refresh() {
-        location.reload();
+        this.map.getMyLocation().then((location: MyLocation) => {
+            this.marker.setPosition(location.latLng);
+        });
     }
 
     /**
@@ -174,10 +178,10 @@ export class HomePage implements OnInit {
                         this.map.getMyLocation().then((location: MyLocation) => {
                             let position = {
                                 'latLng': location.latLng,
-                                'heure': location.time
+                                'time': location.time
                             };
                             that.addMarker(position, 'blue');
-                            that.saveMarkerPosition(position, null);
+                            that.saveMarkerPosition(position, messageData.message);
                         });
                     }
                 }
@@ -193,8 +197,9 @@ export class HomePage implements OnInit {
             console.log("Stockage du lieu : " + location.time);
             let position = {
                 'latLng': location.latLng,
-                'heure': location.time
+                'time': location.time
             };
+
             that.addMarker(position, 'blue');
             that.saveMarkerPosition(position, null);
         });
@@ -217,14 +222,13 @@ export class HomePage implements OnInit {
                 };
                 that.addMarker(position, 'blue');
             }
-        });
+        }).catch(error => console.log('Erreur : liste de lieux vide pour user (home-page.ts)'));
     }
 
     async createMarkerListener(marker, location) {
         let that = this;
         marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
             let loc = marker.get('position');
-            console.log("Envoi location marker : " + loc);
             let coord = loc.lat + '&' + loc.lng;
             this.router.navigate(['/liste-messages', coord]);
         });
@@ -234,7 +238,6 @@ export class HomePage implements OnInit {
         let that = this;
         this.firebaseService.getAllMarkers().then(function (lieux) {
             for (let key of Object.keys(lieux)) {
-                console.log(key);
                 let lieu = lieux[key];
                 let position = {
                     'latLng': {
@@ -245,7 +248,7 @@ export class HomePage implements OnInit {
                 };
                 that.addMarker(position, 'green');
             }
-        });
+        }).catch(error => console.log('Erreur : liste de lieux vide (home-page.ts)'));
     }
 
     chargerListePersonnes() {
@@ -259,7 +262,7 @@ export class HomePage implements OnInit {
                     nom: personne.nom + ' ' + personne.prenom,
                     icon: 'contact'
                 });
-                console.log('Item ' + key + ' ajouté');
+                console.log('LISTE PERSONNE : Personne ' + key + ' ajoutée');
             }
         });
 

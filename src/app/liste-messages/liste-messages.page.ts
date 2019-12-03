@@ -28,7 +28,6 @@ export class ListeMessagesPage implements OnInit {
             this.locationLieu = res['location'];
             this.lat = +this.locationLieu.substr(0, this.locationLieu.indexOf('&'));
             this.lng = +this.locationLieu.substr(this.locationLieu.indexOf('&') + 1, this.locationLieu.length);
-            console.log('Lat : ' + this.lat + ' Lng : ' + this.lng);
         });
     }
 
@@ -37,32 +36,34 @@ export class ListeMessagesPage implements OnInit {
     }
 
     initField(items) {
+        console.log('INIT MESSAGES');
         var that = this;
-
         this.firebaseService.getAllMarkers().then(function (lieux) {
+            console.log('(liste-msg) LISTE NON VIDE ');
             for (let key of Object.keys(lieux)) {
                 let lieu = lieux[key];
-                //console.log(Math.round(lieu.lat * 100) / 100 + ' ' + Math.round(that.lat * 100) / 100 + ' ' + Math.round(lieu.lgt * 100) / 100 + ' ' + Math.round(that.lng * 100) / 100); // Il faut arrondir la valeur
-                //if (Math.round(lieu.lat * 100) / 100 == Math.round(that.lat * 100) / 100 && Math.round(lieu.lgt * 100) / 100 == Math.round(that.lng * 100) / 100) {
+                console.log('(liste-msg) LISTE NON VIDE + lieu :' + lieu.lat + ' ' + that.lat);
                 if (Math.round(lieu.lat * 100) / 100 == Math.round(that.lat * 100) / 100 && Math.round(lieu.lgt * 100) / 100 == Math.round(that.lng * 100) / 100) {
                     that.idLieu = key;
-                    console.log(that.idLieu);
+                    console.log('(liste-msg) LIEU TROUVE : ' + that.idLieu);
                     if (lieu.messages != undefined) {
                         document.getElementById("vide").innerHTML = "";
                         for (let keyLieu of Object.keys(lieu.messages)) {
                             let message = lieu.messages[keyLieu];
-                            console.log('Ajout du message : ' + message.message);
+                            console.log('Ajout du message : ' + message);
                             items.push({
-                                message: message.message,
+                                message: message,
                                 icon: 'mail'
                             })
                         }
-                    } else {
+                    } else if (lieu.messages == undefined) {
                         document.getElementById("vide").innerHTML = "Aucun message n'a été déposé pour le moment.";
                     }
                 }
             }
-        });
+
+
+        }).catch(error => console.log('Erreur : liste de lieux vide (liste-messages.ts)'));
     }
 
     goBack() {
@@ -73,7 +74,7 @@ export class ListeMessagesPage implements OnInit {
         const alert = await this.alertController.create({
             header: 'Ecrire un message',
             inputs: [{
-                name: 'msg',
+                name: 'message',
                 type: 'text',
                 placeholder: 'Saisir votre message'
             }],
@@ -92,13 +93,13 @@ export class ListeMessagesPage implements OnInit {
                         that.firebaseService.createMessage(messageData, that.idLieu);
                         that.firebaseService.addMessageToLieu(messageData, that.idLieu);
                         this.goBack();
+                        presentToast();
                     }
                 }
             ]
         });
 
         await alert.present();
-        presentToast();
 
         async function presentToast() {
             const toast = document.createElement('ion-toast');
