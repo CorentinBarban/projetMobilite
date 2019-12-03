@@ -33,7 +33,6 @@ export class CalendrierPage implements OnInit {
     };
     public calendar;
 
-
     public allEvents = [];
 
     @ViewChild(CalendarComponent, {static: false}) myCalendar: CalendarComponent;
@@ -67,7 +66,7 @@ export class CalendrierPage implements OnInit {
     }
 
     addEvent() {
-        this.afDB.list('evenements').push({
+        let key = this.afDB.list('evenements').push({
             title: this.newEvent.title,
             startTime: this.newEvent.startTime,
             endTime: this.newEvent.endTime,
@@ -75,11 +74,13 @@ export class CalendrierPage implements OnInit {
             lat: '',
             lng: ''
         });
+        console.log(('Id event : ' + key.key));
         this.showHideForm();
+        this.selectLocation(key.key);
     }
 
-    creerEvenement() {
-        this.router.navigate(['/map-event']);
+    selectLocation(idEvent) {
+        this.router.navigate(['/map-event', idEvent]);
     }
 
     loadEvent() {
@@ -92,8 +93,7 @@ export class CalendrierPage implements OnInit {
                     title: action.payload.exportVal().title,
                     startTime: new Date(action.payload.exportVal().startTime),
                     endTime: new Date(action.payload.exportVal().endTime),
-                    description: action.payload.exportVal().description,
-                    imageURL: action.payload.exportVal().imageURL
+                    description: action.payload.exportVal().description
                 });
             });
         });

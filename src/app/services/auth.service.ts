@@ -26,7 +26,7 @@ export class AuthService {
         });
     }
 
-    createUser(value) { // PROBLEME : LORS DE LA MODIFICATION, TOUT LES USERS SONT MODIFIES ET LES LIEUX SUPPRIMES
+    createUser(value) {
         let postData = {
             prenom: value.prenom,
             nom: value.nom,
@@ -41,18 +41,18 @@ export class AuthService {
         });
     }
 
-    updateInformation(value) { // PROBLEME : LORS DE LA MODIFICATION, TOUT LES USERS SONT MODIFIES ET LES LIEUX SUPPRIMES
+    updateInformation(value) {
         let postData = {
             prenom: value.prenom,
             nom: value.nom,
             email: value.email,
             url: value.url,
-            type: 'user'
         };
         this.afAuth.user.subscribe(currentUser=>{
-            let updates = {};
-            updates['/users/' + currentUser.uid] = postData;
-            firebase.database().ref().update(updates);
+            firebase.database().ref('/users/' + currentUser.uid).update({
+                prenom: value.prenom, nom: value.nom, email: value.email,
+                url: value.url,
+            });
         });
     }
 

@@ -62,6 +62,7 @@ export class HomePage implements OnInit {
         await this.platform.ready();
         await this.loadMap();
         await this.getAllMarkers();
+        await this.getAllEvents();
         await this.getAllMarkerUser();
         await this.getPosition();
     }
@@ -126,6 +127,18 @@ export class HomePage implements OnInit {
             icon: color
         });
         this.createMarkerListener(marker, location);
+    }
+
+    addMarkerEvent(informations) {
+        let startDate = new Date(informations.startTime).toISOString();
+        let endDate = new Date(informations.endTime).toISOString();
+        let marker: Marker = this.map.addMarkerSync({
+            position: informations.latLng,
+            title: 'Evenement : ' + informations.title,
+            snippet: startDate.toString() + ' ' + endDate.toString(),
+            animation: GoogleMapsAnimation.BOUNCE,
+            icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/info-i_maps.png'
+        });
     }
 
     /**
@@ -253,6 +266,26 @@ export class HomePage implements OnInit {
                 that.addMarker(position, 'green');
             }
         }).catch(error => console.log('Erreur : liste de lieux vide (home-page.ts)'));
+    }
+
+    getAllEvents() {
+        let that = this;
+        this.firebaseService.getAllEvents().then(function (events) {
+            for (let key of Object.keys(events)) {
+                let event = events[key];
+                let informations = {
+                    title: event.title,
+                    description: event.description,
+                    'latLng': {
+                        'lat': event.lat,
+                        'lng': event.lng,
+                    },
+                    startTime: event.startTime,
+                    endTime: event.endTime
+                };
+                that.addMarkerEvent(informations);
+            }
+        }).catch(error => console.log('Erreur : liste d events est vide (home-page.ts)'));
     }
 
     chargerListePersonnes() {
