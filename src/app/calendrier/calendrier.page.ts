@@ -85,33 +85,20 @@ export class CalendrierPage implements OnInit {
 
     loadEvent() {
         var that = this;
-        this.afDB.list('evenements').snapshotChanges(['child_added']).subscribe(actions => {
+        this.afDB.list('/evenements').snapshotChanges(['child_added']).subscribe(actions => {
             this.allEvents = [];
             actions.forEach(action => {
-                console.log('action: ' + action.payload.exportVal().title);
                 this.allEvents.push({
                     title: action.payload.exportVal().title,
                     startTime: new Date(action.payload.exportVal().startTime),
                     endTime: new Date(action.payload.exportVal().endTime),
-                    description: action.payload.exportVal().description
+                    description: action.payload.exportVal().description,
+                    lat: action.payload.exportVal().lat,
+                    lng: action.payload.exportVal().lng
                 });
+
             });
         });
-        /*let that = this;
-        this.firebaseService.getAllEvents().then(function (events) {
-            that.allEvents = [];
-            for (let key of Object.keys(events)) {
-                let value = events[key];
-                that.allEvents.push({
-                    title: value.title,
-                    description: value.description,
-                    startTime: new Date(value.startTime),
-                    endTime: new Date(value.endTime),
-                    lat: value.lat,
-                    lgt: value.lgt
-                });
-            }
-        });*/
     }
 
     async onEventSelected(event: any) {

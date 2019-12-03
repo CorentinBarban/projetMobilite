@@ -53,7 +53,6 @@ export class ListeLieuxPersonnePage implements OnInit {
                     });
                     i = i + 1;
                 }
-
             } else {
                 document.getElementById("vide").innerHTML = "La liste de lieux pour cet utilisateur est vide.";
             }

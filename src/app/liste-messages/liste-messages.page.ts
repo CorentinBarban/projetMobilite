@@ -36,7 +36,6 @@ export class ListeMessagesPage implements OnInit {
     }
 
     initField(items) {
-        console.log('INIT MESSAGES');
         var that = this;
         this.firebaseService.getAllMarkers().then(function (lieux) {
             console.log('(liste-msg) LISTE NON VIDE ');
@@ -74,7 +73,7 @@ export class ListeMessagesPage implements OnInit {
         const alert = await this.alertController.create({
             header: 'Ecrire un message',
             inputs: [{
-                name: 'message',
+                name: 'msg',
                 type: 'text',
                 placeholder: 'Saisir votre message'
             }],
@@ -90,6 +89,7 @@ export class ListeMessagesPage implements OnInit {
                     text: 'Valider',
                     handler: (messageData) => {
                         let that = this;
+                        console.log(messageData);
                         that.firebaseService.createMessage(messageData, that.idLieu);
                         that.firebaseService.addMessageToLieu(messageData, that.idLieu);
                         this.goBack();

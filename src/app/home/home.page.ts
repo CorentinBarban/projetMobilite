@@ -16,6 +16,8 @@ import { //Import des plugins GoogleMaps nécessaires
 import {Router} from "@angular/router";
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 import {AngularFireAuth} from "@angular/fire/auth";
+import {formatDate} from "@angular/common";
+import * as firebase from "firebase";
 
 @Component({
     selector: 'app-home',
@@ -126,16 +128,16 @@ export class HomePage implements OnInit {
             animation: GoogleMapsAnimation.BOUNCE,
             icon: color
         });
-        this.createMarkerListener(marker, location);
+        this.createMarkerListener(marker);
     }
 
     addMarkerEvent(informations) {
-        let startDate = new Date(informations.startTime).toISOString();
-        let endDate = new Date(informations.endTime).toISOString();
+        let startDate = formatDate(informations.startTime, 'medium', 'fr-FR');
+        let endDate = formatDate(informations.endTime, 'medium', 'fr-FR');
         let marker: Marker = this.map.addMarkerSync({
             position: informations.latLng,
             title: 'Evenement : ' + informations.title,
-            snippet: startDate.toString() + ' ' + endDate.toString(),
+            snippet: startDate + ' ' + endDate,
             animation: GoogleMapsAnimation.BOUNCE,
             icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/info-i_maps.png'
         });
@@ -164,6 +166,7 @@ export class HomePage implements OnInit {
     refresh() {
         this.map.getMyLocation().then((location: MyLocation) => {
             this.marker.setPosition(location.latLng);
+            this.marker.showInfoWindow();
         });
     }
 
@@ -211,14 +214,35 @@ export class HomePage implements OnInit {
     async marquerLieu() {
         let that = this;
         this.map.getMyLocation().then((location: MyLocation) => {
-            console.log("Stockage du lieu : " + location.time);
             let position = {
                 'latLng': location.latLng,
                 'time': location.time
             };
+            console.log('Lieu tag: ' + position.latLng);
+            this.verifierPresenceEvent(position);
 
             that.addMarker(position, 'blue');
             that.saveMarkerPosition(position, null);
+        });
+    }
+
+    verifierPresenceEvent(position) {
+        console.log('Vérification présence');
+        var that = this;
+        this.firebaseService.getAllEvents().then(function (events) {
+            for (let key of Object.keys(events)) {
+                let event = events[key];
+                if (Math.round(position.latLng.lat * 100) / 100 == Math.round(event.lat * 100) / 100 && Math.round(position.latLng.lng * 100) / 100 == Math.round(event.lng * 100) / 100) {
+                    console.log('Présence OK');
+                    that.afAuth.user.subscribe(currentUser => {
+                        if (currentUser) {
+                            firebase.database().ref('/evenements/' + key + '/participants/').update({
+                                idUser: currentUser.uid
+                            });
+                        }
+                    });
+                }
+            }
         });
     }
 
@@ -242,7 +266,7 @@ export class HomePage implements OnInit {
         }).catch(error => console.log('Erreur : liste de lieux vide pour user (home-page.ts)'));
     }
 
-    async createMarkerListener(marker, location) {
+    async createMarkerListener(marker) {
         let that = this;
         marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
             let loc = marker.get('position');
@@ -250,6 +274,15 @@ export class HomePage implements OnInit {
             this.router.navigate(['/liste-messages', coord]);
         });
     }
+
+    /*async createMarkerEventListener(marker, informations) {
+        let that = this;
+        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+            let loc = marker.get('position');
+            let coord = loc.lat + '&' + loc.lng;
+            this.router.navigate(['/', coord]);
+        });
+    }*/
 
     getAllMarkers() {
         let that = this;

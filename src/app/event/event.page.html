@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar color="warning">
-        <ion-title>{{ title }}</ion-title>
+        <ion-title>Evenement : {{ title }}</ion-title>
         <ion-buttons slot="end">
             <ion-button color="light" (click)="close()">
                 <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -11,13 +11,30 @@
 
 <ion-content>
     <ion-item>
-        <ion-label text-wrap>{{ decsription }}</ion-label>
+        <ion-label text-wrap> Description : {{description}}</ion-label>
     </ion-item>
     <ion-item>
-        <ion-label><b>Début:</b> {{ start }}</ion-label>
+        <ion-label><b>Début : </b> {{start}}</ion-label>
     </ion-item>
     <ion-item>
-        <ion-label><b>Fin:</b> {{ end }}</ion-label>
+        <ion-label><b>Fin : </b> {{end}}</ion-label>
     </ion-item>
+    <ion-item>
+        <ion-label>Localisation : <br/>Latitude : {{lat}}<br/>Longitude: {{lng}}</ion-label>
+    </ion-item>
+    <br/>
+    <ion-label>Liste des participants :</ion-label>
+    <div class="liste-personnes">
+        <ion-list>
+            <ion-item *ngFor="let item of listePersonnes">
+                <ion-avatar slot="start">
+                    <img [src]="item.url">
+                </ion-avatar>
+                <ion-label>{{item.nom}}</ion-label>
+                <ion-label slot="end" class="mail">{{item.email}}</ion-label>
+            </ion-item>
+        </ion-list>
+    </div>
+
 
 </ion-content>
