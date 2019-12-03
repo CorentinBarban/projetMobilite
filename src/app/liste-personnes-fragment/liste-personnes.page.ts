@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Location} from "@angular/common";
 import {Router} from "@angular/router";
 import {FirebaseService} from "../services/firebase.service";
+import {AngularFireAuth} from "@angular/fire/auth";
 
 @Component({
     selector: 'app-list',
@@ -17,6 +18,7 @@ export class ListePersonnesPage implements OnInit {
         private navLocation: Location,
         private router: Router,
         private firebaseService: FirebaseService,
+        public afAuth: AngularFireAuth
     ) {
     }
 
@@ -49,6 +51,16 @@ export class ListePersonnesPage implements OnInit {
                     }
                 }
             }
+        });
+    }
+
+    afficherProfil() {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    this.router.navigate(['/profil-details', currentUser.uid]);
+                }
+            });
         });
     }
 

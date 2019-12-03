@@ -41,7 +41,6 @@ export class EventPage implements OnInit {
             for (let key of Object.keys(events)) {
                 let event = events[key];
                 if (event.participants != undefined) {
-                    console.log('Titre :' + event.title);
                     if (event.title == that.title) {
                         for (let keyU of Object.keys(event.participants)) {
                             let user = event.participants[keyU];
@@ -53,15 +52,10 @@ export class EventPage implements OnInit {
                                 });
                             });
                         }
-                    } else {
-                        console.log('titre ne corresponds pas');
                     }
-                } else {
-                    console.log('Liste parti vide');
                 }
             }
         });
-
     }
 
     close() {

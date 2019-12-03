@@ -275,15 +275,6 @@ export class HomePage implements OnInit {
         });
     }
 
-    /*async createMarkerEventListener(marker, informations) {
-        let that = this;
-        marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-            let loc = marker.get('position');
-            let coord = loc.lat + '&' + loc.lng;
-            this.router.navigate(['/', coord]);
-        });
-    }*/
-
     getAllMarkers() {
         let that = this;
         this.firebaseService.getAllMarkers().then(function (lieux) {
