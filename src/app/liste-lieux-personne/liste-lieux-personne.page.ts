@@ -51,8 +51,9 @@ export class ListeLieuxPersonnePage implements OnInit {
                         horodatage: lieu.horodatage,
                         icon: 'flag'
                     });
+                    i = i + 1;
                 }
-                i = i + 1;
+
             } else {
                 document.getElementById("vide").innerHTML = "La liste de lieux pour cet utilisateur est vide.";
             }

@@ -25,10 +25,6 @@
             <ion-input type="text" placeholder="Description" [(ngModel)]="newEvent.description"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label><b>Image:</b></ion-label>
-            <ion-input type="text" placeholder="URL de l'image" [(ngModel)]="newEvent.imageURL"></ion-input>
-        </ion-item>
-        <ion-item>
             <ion-label><b>Début</b></ion-label>
             <ion-datetime doneText="OK" cancelText="Annuler" i18n displayFormat="DD/MM/YYYY HH:mm"
                           pickerFormat="MMM D HH:mm" [(ngModel)]="newEvent.startTime" [min]="minDate"></ion-datetime>
@@ -36,20 +32,26 @@
         <ion-item>
             <ion-label><b>Fin</b></ion-label>
             <ion-datetime doneText="OK" cancelText="Annuler" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="MMM D HH:mm"
-                          [(ngModel)]="newEvent.endTime" [min]="minDate"></ion-datetime>
+                          [(ngModel)]="newEvent.endTime" [min]="minDate">
+            </ion-datetime>
         </ion-item>
-        <ion-button color="warning" expand="block" (click)="addEvent()">Ajouter</ion-button>
+        <ion-button color="success" expand="block" (click)="addLocation()">Sélectionner localisation</ion-button>
+        <br/><br/>
+        <ion-button color="primary" expand="block" (click)="addEvent()">Ajouter</ion-button>
     </div>
 
-    <calendar *ngIf="!showAddEvent" id="myCal" id="myCalendar"
+    <calendar *ngIf="!showAddEvent" id="myCal"
               locale="fr-FR"
-              calendarMode="month"
+              [eventSource]="allEvents"
+              [calendarMode]="mode"
+              [currentDate]="currentDate"
+              (onEventSelected)="onEventSelected($event)"
+              (onTitleChanged)="onViewTitleChanged($event)"
+              (onTimeSelected)="onTimeSelected($event)"
               startHour="6"
               endHour="20"
               step="30"
-              startingDayWeek="1"
-              [currentDate]="currentDate"
-              (onTitleChanged)="onViewTitleChanged($event)">
+              startingDayWeek="1">
     </calendar>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="showHideForm()">

@@ -120,7 +120,6 @@ export class FirebaseService {
             let postData = {
                 title: value.title,
                 description: value.description,
-                url: value.url,
                 startTime: value.startTime,
                 endTime: value.endTime,
                 lat: value.lat,
@@ -129,6 +128,19 @@ export class FirebaseService {
             let ref = firebase.database().ref("/evenements/");
             ref.push(postData);
         })
+    }
+
+    getAllEvents() {
+        return new Promise<any>((resolve, reject) => {
+            this.afAuth.user.subscribe(currentUser => {
+                if (currentUser) {
+                    let starCountRef = firebase.database().ref('/evenements/');
+                    starCountRef.on('value', function(snapshot) {
+                        resolve(snapshot.val());
+                    });
+                }
+            });
+        });
     }
 
     addMessageToLieu(value, idLieu) {

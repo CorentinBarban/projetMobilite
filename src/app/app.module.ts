@@ -18,6 +18,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
+import {AngularFireDatabase} from '@angular/fire/database';
+import {EventPageModule} from './event/event.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -32,11 +34,13 @@ import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
         AngularFirestoreModule, // imports firebase/firestore
         AngularFireAuthModule, // imports firebase/auth
         AngularFireStorageModule, // imports firebase/storage
+        EventPageModule
     ],
     providers: [
         StatusBar,
         SplashScreen,
         AndroidPermissions,
+        AngularFireDatabase,
         { provide: FirestoreSettingsToken, useValue: {} },
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
     ],

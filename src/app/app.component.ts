@@ -61,7 +61,7 @@ export class AppComponent {
                                         icon: 'compass'
                                     },
                                     {
-                                        title: 'Créer un évènement',
+                                        title: 'Gestion des évènements',
                                         url: '/calendrier',
                                         icon: 'calendar'
                                     }

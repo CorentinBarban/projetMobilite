@@ -45,7 +45,12 @@ const routes: Routes = [
   }, {
     path: 'calendrier',
     loadChildren: () => import('./calendrier/calendrier.module').then(m => m.CalendrierPageModule)
-  }
+    },
+    {
+        path: 'event',
+        loadChildren: () => import('./event/event.module').then(m => m.EventPageModule)
+    }
+
 ];
 
 @NgModule({
