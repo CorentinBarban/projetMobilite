@@ -13,7 +13,6 @@ import { //Import des plugins GoogleMaps nécessaires
     LatLng
 } from '@ionic-native/google-maps';
 
-
 import {Router} from "@angular/router";
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 import {AngularFireAuth} from "@angular/fire/auth";
@@ -30,7 +29,10 @@ export class HomePage implements OnInit {
     labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     labelIndex = 0;
     marker: Marker;
+    public showMap: boolean;
+    public loadingMatches: boolean;
     public items: Array<{ id: string; nom: string; icon: string }> = [];
+    public allItems: Array<{ id: string; nom: string; icon: string }> = [];
 
     constructor(
         public menu: MenuController,
@@ -45,6 +47,7 @@ export class HomePage implements OnInit {
         private androidPermissions: AndroidPermissions,
         public afAuth: AngularFireAuth,
     ) {
+
         /*this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
             result => console.log('Has permission?',result.hasPermission),
             err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
@@ -54,6 +57,7 @@ export class HomePage implements OnInit {
     }
 
     async ngOnInit() {
+        document.getElementById('liste-personnes').style.display = 'none';
         this.chargerListePersonnes();
         await this.platform.ready();
         await this.loadMap();
@@ -252,7 +256,6 @@ export class HomePage implements OnInit {
     }
 
     chargerListePersonnes() {
-        document.getElementById("liste-personnes").style.display = "none";
         let that = this;
         this.firebaseService.getAllUsers().then(function (personnes) {
             for (let key of Object.keys(personnes)) {
@@ -262,36 +265,33 @@ export class HomePage implements OnInit {
                     nom: personne.nom + ' ' + personne.prenom,
                     icon: 'contact'
                 });
+                that.allItems = that.items;
                 console.log('LISTE PERSONNE : Personne ' + key + ' ajoutée');
             }
         });
+    }
 
-        const searchbar = document.getElementById("searchbar");
-        const items = Array.from(document.getElementById("liste-personnes").children);
-        searchbar.addEventListener('ionInput', handleInput);
+    getResults(event) {
+        document.getElementById('map_canvas').style.display = 'none';
+        document.getElementById('liste-personnes').style.display = 'contents';
+        this.items = this.allItems;
+        const val = event.detail.value;
 
-        function handleInput(event) {
-            document.getElementById("map_canvas").style.display = "none";
-            document.getElementById("liste-personnes").style.display = "contents";
-            const query = event.target.value.toLowerCase();
-            requestAnimationFrame(() => {
-                items.forEach(item => {
-                    const shouldShow = item.textContent.toLowerCase().indexOf(query) > -1;
-                    let value = item as HTMLElement;
-                    value.style.display = shouldShow ? 'block' : 'none';
-                });
+        if (val.trim() !== '') {
+            this.items = this.items.filter(term => {
+                return term.nom.toLowerCase().indexOf(val.trim().toLowerCase()) > -1;
             });
         }
     }
+
 
     afficherDetails(id) {
         this.router.navigate(['/profil-details', id]);
     }
 
     onCancel() {
-        console.log('cancel tmtc');
-        document.getElementById("map_canvas").style.display = "contents";
         document.getElementById("liste-personnes").style.display = "none";
+        document.getElementById('map_canvas').style.display = 'contents';
     }
 
     afficherProfil() {

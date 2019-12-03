@@ -114,22 +114,6 @@ export class FirebaseService {
         });
     }
 
-    createEvent(value) {
-        return new Promise<any>((resolve, reject) => {
-            let currentUser = firebase.auth().currentUser;
-            let postData = {
-                title: value.title,
-                description: value.description,
-                startTime: value.startTime,
-                endTime: value.endTime,
-                lat: value.lat,
-                lgt: value.lgt
-            };
-            let ref = firebase.database().ref("/evenements/");
-            ref.push(postData);
-        })
-    }
-
     getAllEvents() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
