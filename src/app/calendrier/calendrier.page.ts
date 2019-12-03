@@ -20,7 +20,6 @@ export class CalendrierPage implements OnInit {
     public currentMonth: string;
     public mode = 'month';
     public afAuth: AngularFireAuth;
-    public router: Router;
     public showAddEvent: boolean;
     public minDate = new Date().toISOString();
     public myCal = document.getElementById('myCal');
@@ -42,6 +41,7 @@ export class CalendrierPage implements OnInit {
     constructor(
         public modalController: ModalController,
         private afDB: AngularFireDatabase,
+        private router: Router
     ) {
         this.loadEvent();
     }
@@ -76,16 +76,10 @@ export class CalendrierPage implements OnInit {
             lng: ''
         });
         this.showHideForm();
-        /*let value = {
-            title: this.newEvent.title,
-            description: this.newEvent.description,
-            startTime: this.newEvent.startTime,
-            endTime: this.newEvent.endTime,
-            lat: this.newEvent.lat,
-            lgt: this.newEvent.lgt,
-        };
-        this.firebaseService.createEvent(value);
-        this.showHideForm();*/
+    }
+
+    creerEvenement() {
+        this.router.navigate(['/map-event']);
     }
 
     loadEvent() {

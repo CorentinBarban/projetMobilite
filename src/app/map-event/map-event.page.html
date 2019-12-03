@@ -1,0 +1,14 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button shape="round" (click)="goBack()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Sélectionnez un lieu</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content ng-controller="MapsCtrl">
+    <div id="map_canvas"></div>
+</ion-content>

@@ -15,31 +15,6 @@
 </ion-header>
 
 <ion-content>
-    <div *ngIf="showAddEvent" class="ion-padding">
-        <ion-item>
-            <ion-label><b>Titre:</b></ion-label>
-            <ion-input type="text" placeholder="Titre" [(ngModel)]="newEvent.title"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label><b>Description:</b></ion-label>
-            <ion-input type="text" placeholder="Description" [(ngModel)]="newEvent.description"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label><b>Début</b></ion-label>
-            <ion-datetime doneText="OK" cancelText="Annuler" i18n displayFormat="DD/MM/YYYY HH:mm"
-                          pickerFormat="MMM D HH:mm" [(ngModel)]="newEvent.startTime" [min]="minDate"></ion-datetime>
-        </ion-item>
-        <ion-item>
-            <ion-label><b>Fin</b></ion-label>
-            <ion-datetime doneText="OK" cancelText="Annuler" displayFormat="DD/MM/YYYY HH:mm" pickerFormat="MMM D HH:mm"
-                          [(ngModel)]="newEvent.endTime" [min]="minDate">
-            </ion-datetime>
-        </ion-item>
-        <ion-button color="success" expand="block" (click)="addLocation()">Sélectionner localisation</ion-button>
-        <br/><br/>
-        <ion-button color="primary" expand="block" (click)="addEvent()">Ajouter</ion-button>
-    </div>
-
     <calendar *ngIf="!showAddEvent" id="myCal"
               locale="fr-FR"
               [eventSource]="allEvents"
@@ -53,11 +28,15 @@
               step="30"
               startingDayWeek="1">
     </calendar>
+
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button (click)="showHideForm()">
+        <ion-fab-button (click)="creerEvenement()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+        <!--<ion-fab-button (click)="showHideForm()">
             <ion-icon *ngIf="!showAddEvent" name="add"></ion-icon>
             <ion-icon *ngIf="showAddEvent" name="close"></ion-icon>
-        </ion-fab-button>
+        </ion-fab-button> -->
     </ion-fab>
 
 </ion-content>
