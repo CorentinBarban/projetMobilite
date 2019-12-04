@@ -27,6 +27,7 @@ export class ProfilDetailsPage implements OnInit {
     url;
     validationsForm: FormGroup;
     loading: boolean = false;
+    bouttonDeco: boolean = false;
 
     constructor(
         private menu: MenuController,
@@ -49,7 +50,8 @@ export class ProfilDetailsPage implements OnInit {
     ngOnInit() {
         this.afAuth.user.subscribe(currentUser => {
             if (currentUser.uid != this.idPersonne) {
-                document.getElementById("bouton-edit").style.display = "none";
+                document.getElementById('bouton-editer').style.display = 'none';
+                this.bouttonDeco = !this.bouttonDeco;
             }
         });
     }

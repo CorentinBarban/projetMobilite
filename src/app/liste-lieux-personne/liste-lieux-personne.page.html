@@ -26,7 +26,7 @@
         <ion-list>
             <ion-item *ngFor="let item of listeLieux">
                 <ion-icon [name]="item.icon" slot="start"></ion-icon>
-                <ion-label>Lieu {{item.count}}</ion-label>
+                <ion-label>Lieu taggé {{item.count}}</ion-label>
                 <ion-label slot="end" class="coord">{{item.lat}}<br/>{{item.lgt}}</ion-label>
             </ion-item>
         </ion-list>

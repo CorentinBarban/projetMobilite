@@ -115,9 +115,8 @@ export class MapEventPage implements OnInit {
     }
 
     savePosition() {
-        console.log('Sauvegarde');
         this.afDB.database.ref('evenements/' + this.idEvent).update({lat: this.lat, lng: this.lgt});
-        this.router.navigate(['/calendar']);
+        this.router.navigate(['/calendrier']);
     }
 
     ionViewWillEnter() {
@@ -125,7 +124,7 @@ export class MapEventPage implements OnInit {
     }
 
     goBack() {
-        this.router.navigate(['/calendar']);
+        this.router.navigate(['/calendrier']);
     }
 
 }
