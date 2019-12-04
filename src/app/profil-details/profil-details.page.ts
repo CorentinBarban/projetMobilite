@@ -27,7 +27,7 @@ export class ProfilDetailsPage implements OnInit {
     url;
     validationsForm: FormGroup;
     loading: boolean = false;
-    bouttonDeco: boolean = false;
+    boutonDeco: boolean = true;
 
     constructor(
         private menu: MenuController,
@@ -51,7 +51,7 @@ export class ProfilDetailsPage implements OnInit {
         this.afAuth.user.subscribe(currentUser => {
             if (currentUser.uid != this.idPersonne) {
                 document.getElementById('bouton-editer').style.display = 'none';
-                this.bouttonDeco = !this.bouttonDeco;
+                this.boutonDeco = !this.boutonDeco;
             }
         });
     }
