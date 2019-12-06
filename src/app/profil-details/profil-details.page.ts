@@ -61,7 +61,7 @@ export class ProfilDetailsPage implements OnInit {
     }
 
     goBack() {
-        this.location.back();
+        this.router.navigate(['/home']);
     }
 
     logOut() {

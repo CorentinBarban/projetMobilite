@@ -2,13 +2,18 @@ import {Component, OnInit} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {NavParams} from '@ionic/angular';
 import {formatDate} from '@angular/common';
-import {FirebaseService} from "../services/firebase.service";
+import {FirebaseService} from '../services/firebase.service';
 
 @Component({
     selector: 'app-event',
     templateUrl: './event.page.html',
     styleUrls: ['./event.page.scss'],
 })
+
+/**
+ * Classe gérant l'affichage de la modale affichant les informations d'un évenement particulier
+ */
+
 export class EventPage implements OnInit {
     title: string;
     description: string;
@@ -34,6 +39,10 @@ export class EventPage implements OnInit {
     ngOnInit() {
         this.initFields();
     }
+
+    /**
+     * Remplissage automatique des champs à partir des données en base, y compris la liste des participants ayant taggé leur position à proximité
+     */
 
     initFields() {
         var that = this;

@@ -24,6 +24,11 @@ import * as firebase from "firebase";
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
+
+/**
+ * Classe Home
+ * Paramétrage et chargement de la carte, des marqueurs en base (s'il y en a) et gestion de la carte (ajout de marqueurs et de messages).
+ */
 export class HomePage implements OnInit {
     map: GoogleMap; //Instance de carte
     loading: any;
@@ -49,15 +54,12 @@ export class HomePage implements OnInit {
         private androidPermissions: AndroidPermissions,
         public afAuth: AngularFireAuth,
     ) {
-
-        /*this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-            result => console.log('Has permission?',result.hasPermission),
-            err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
-        );
-
-        this.androidPermissions.requestPermissions(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);*/
     }
 
+    /**
+     * Classe lancée lors de l'initalisation de la page.
+     * Gère l'instanciation de la carte et des marqueurs.
+     */
     async ngOnInit() {
         document.getElementById('liste-personnes').style.display = 'none';
         this.chargerListePersonnes();
@@ -69,8 +71,9 @@ export class HomePage implements OnInit {
         await this.getPosition();
     }
 
+
     /**
-     * Charger la map avec google map
+     * Instanciation de la carte Google Maps
      */
     loadMap() {
         Environment.setEnv({
@@ -82,7 +85,7 @@ export class HomePage implements OnInit {
     }
 
     /**
-     * Obtenir ca position actuelle
+     * Obtenir la position géographique actuelle de l'utilisateur
      */
     async getPosition() {
         this.marker = null;
@@ -114,13 +117,13 @@ export class HomePage implements OnInit {
     }
 
     /**
-     * Ajouter un marker
-     * @param location
+     * Ajouter un marker sur la carte.
+     * @param location : la localisation actuelle de l'utilisateur
+     * @param color : la couleur que doit avoir le marqueur
      */
 
     addMarker(location, color) {
         let date = new Date(location.heure * 1000);
-        console.log(location.heure);
         let marker: Marker = this.map.addMarkerSync({
             position: location.latLng,
             title: 'Lieu taggé',
@@ -130,6 +133,11 @@ export class HomePage implements OnInit {
         });
         this.createMarkerListener(marker);
     }
+
+    /**
+     * Ajouter un marqueur de type "évenement" sur la carte, avec une icône différente
+     * @param informations
+     */
 
     addMarkerEvent(informations) {
         let startDate = formatDate(informations.startTime, 'medium', 'fr-FR');
@@ -144,9 +152,9 @@ export class HomePage implements OnInit {
     }
 
     /**
-     * Sauvegarder un marker
-     * @param location
-     * @param message
+     * Sauvegarder un marqueur en base
+     * @param location : les diverses informations du marqueur
+     * @param message : le message laissé à l'endroit du marqueur (peut être vide)
      */
 
     saveMarkerPosition(location, message) {
@@ -159,9 +167,17 @@ export class HomePage implements OnInit {
         this.firebaseService.createUserPosition(value);
     }
 
+    /**
+     * Méthode lancée automatiquement
+     */
+
     ionViewWillEnter() {
         this.menu.enable(true);
     }
+
+    /**
+     * Rafraîchir l'affichage du marqueur pour afficher la nouvelle position de l'utilisateur
+     */
 
     refresh() {
         this.map.getMyLocation().then((location: MyLocation) => {
@@ -189,7 +205,7 @@ export class HomePage implements OnInit {
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: () => {
-                        console.log('Confirm Cancel');
+                        console.log('Retour confirmé');
                     }
                 }, {
                     text: 'Valider',
@@ -211,6 +227,10 @@ export class HomePage implements OnInit {
         await alert.present();
     }
 
+    /**
+     * Permet de marquer un lieu sans laisser de message (J'y étais)
+     */
+
     async marquerLieu() {
         let that = this;
         this.map.getMyLocation().then((location: MyLocation) => {
@@ -218,7 +238,6 @@ export class HomePage implements OnInit {
                 'latLng': location.latLng,
                 'time': location.time
             };
-            console.log('Lieu tag: ' + position.latLng);
             this.verifierPresenceEvent(position);
 
             that.addMarker(position, 'blue');
@@ -226,14 +245,17 @@ export class HomePage implements OnInit {
         });
     }
 
+    /**
+     * Vérification de la présence d'un évenement à l'endroit où se trouve l'utilisateur, pour prendre en compte sa participation ou non.
+     * @param position de l'utilisateur
+     */
+
     verifierPresenceEvent(position) {
-        console.log('Vérification présence');
         var that = this;
         this.firebaseService.getAllEvents().then(function (events) {
             for (let key of Object.keys(events)) {
                 let event = events[key];
                 if (Math.round(position.latLng.lat * 100) / 100 == Math.round(event.lat * 100) / 100 && Math.round(position.latLng.lng * 100) / 100 == Math.round(event.lng * 100) / 100) {
-                    console.log('Présence OK');
                     that.afAuth.user.subscribe(currentUser => {
                         if (currentUser) {
                             firebase.database().ref('/evenements/' + key + '/participants/').update({
@@ -247,7 +269,7 @@ export class HomePage implements OnInit {
     }
 
     /**
-     *
+     * Récupérer tous les marqueurs en base appartenant à l'utilisateur avant de les afficher sur la carte
      */
     getAllMarkerUser() {
         let that = this;
@@ -266,6 +288,11 @@ export class HomePage implements OnInit {
         }).catch(error => console.log('Erreur : liste de lieux vide pour user (home-page.ts)'));
     }
 
+    /**
+     * Créer un écouteur sur un marqueur afin d'afficher les messages qui y ont été déposés
+     * @param marker
+     */
+
     async createMarkerListener(marker) {
         let that = this;
         marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
@@ -274,6 +301,10 @@ export class HomePage implements OnInit {
             this.router.navigate(['/liste-messages', coord]);
         });
     }
+
+    /**
+     * Récupérer tous les autres marqueurs qui sont en base et qui n'appartiennent pas à l'utilisateur afin de les ajouter sur la carte
+     */
 
     getAllMarkers() {
         let that = this;
@@ -291,6 +322,10 @@ export class HomePage implements OnInit {
             }
         }).catch(error => console.log('Erreur : liste de lieux vide (home-page.ts)'));
     }
+
+    /**
+     * Récupérer tous les évenements des autres utilisateurs en base
+     */
 
     getAllEvents() {
         let that = this;
@@ -312,6 +347,10 @@ export class HomePage implements OnInit {
         }).catch(error => console.log('Erreur : liste d events est vide (home-page.ts)'));
     }
 
+    /**
+     * Charger la liste des personnes inscrites dans une liste pour la recherche par utilisateur
+     */
+
     chargerListePersonnes() {
         let that = this;
         this.firebaseService.getAllUsers().then(function (personnes) {
@@ -323,10 +362,14 @@ export class HomePage implements OnInit {
                     icon: 'contact'
                 });
                 that.allItems = that.items;
-                console.log('LISTE PERSONNE : Personne ' + key + ' ajoutée');
             }
         });
     }
+
+    /**
+     * Affichage de la liste avec la personne concernée en fonction de la recherche
+     * @param event l'évenement déclenchant la méthode, contenant les informations
+     */
 
     getResults(event) {
         document.getElementById('map_canvas').style.display = 'none';
@@ -341,15 +384,25 @@ export class HomePage implements OnInit {
         }
     }
 
-
+    /**
+     * Rediriger vers la page d'affichage des détails du profil dans la recherche utilisateur
+     * @param id : l'id utilisateur en question
+     */
     afficherDetails(id) {
         this.router.navigate(['/profil-details', id]);
     }
 
+    /**
+     * Cacher la liste de personnes et afficher la carte lors du clic sur la bouton d'annulation dans la barre de recherche
+     */
     onCancel() {
-        document.getElementById("liste-personnes").style.display = "none";
+        document.getElementById('liste-personnes').style.display = 'none';
         document.getElementById('map_canvas').style.display = 'contents';
     }
+
+    /**
+     * Afficher le profil de l'utilisateur connecté
+     */
 
     afficherProfil() {
         return new Promise<any>((resolve, reject) => {

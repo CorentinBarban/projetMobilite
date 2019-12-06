@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuController, IonSlides } from '@ionic/angular';
+import {MenuController, IonSlides, LoadingController} from '@ionic/angular';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -22,10 +22,10 @@ export class RegisterPage implements OnInit {
     url: string= "/assets/images/add.png";
     errorMessage: string = '';
     successMessage: string = '';
+    loading: any;
     newImage: Image = {
         id: this.afs.createId(), image: ''
     }
-    loading: boolean = false;
     validation_messages = {
         'email': [
             {type: 'required', message: 'Adresse email requise.'},
@@ -42,6 +42,7 @@ export class RegisterPage implements OnInit {
         private formBuilder: FormBuilder,
         private router: Router,
         private afs: AngularFirestore,
+        public loadingCtrl: LoadingController,
         private storage: AngularFireStorage
     ) { }
 
@@ -68,18 +69,16 @@ export class RegisterPage implements OnInit {
     }
 
     tryRegister(value) {
-        console.log('tryregister :' + value);
         this.authService.doRegister(value)
             .then(res => {
-                // console.log(res);
                 this.errorMessage = '';
-                this.successMessage = 'Your account has been created. Please log in.';
-
+                this.successMessage = 'Le compte a bien été créé. Merci de vous connecter.';
             }, err => {
-                // console.log(err);
+                console.log(err);
                 this.errorMessage = err.message;
                 this.successMessage = '';
             });
+        console.log('ca amrche');
     }
 
     goLoginPage() {
@@ -90,8 +89,12 @@ export class RegisterPage implements OnInit {
         this.menu.enable(false);
     }
 
-    uploadImage(event) {
+    async uploadImage(event) {
         this.loading = true;
+        this.loading = await this.loadingCtrl.create({
+            message: 'Patientez...'
+        });
+        await this.loading.present();
         if (event.target.files && event.target.files[0]) {
             var reader = new FileReader();
 
@@ -108,6 +111,7 @@ export class RegisterPage implements OnInit {
                 const ref = result.ref;
                 result.task.then(a => {
                     ref.getDownloadURL().subscribe(a => {
+                        this.loading.dismiss();
                         console.log(a);
                         this.validations_form.get('url').setValue(a);
                         this.newImage.image = a;

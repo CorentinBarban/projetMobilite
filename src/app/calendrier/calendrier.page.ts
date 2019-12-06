@@ -10,11 +10,17 @@ import {CalendarComponent} from 'ionic2-calendar/calendar';
 import {AngularFireDatabase} from '@angular/fire/database';
 import {ModalController} from '@ionic/angular';
 import {EventPage} from '../event/event.page';
+
 @Component({
     selector: 'app-home',
     templateUrl: 'calendrier.page.html',
     styleUrls: ['calendrier.page.scss'],
 })
+
+/**
+ * Classe réalisant l'affichage et la gestion du calendrier et des évenements qui y sont liés.
+ */
+
 export class CalendrierPage implements OnInit {
     public currentDate = new Date();
     public currentMonth: string;
@@ -31,6 +37,7 @@ export class CalendrierPage implements OnInit {
         lat: '',
         lgt: ''
     };
+
     public calendar;
 
     public allEvents = [];
@@ -46,12 +53,20 @@ export class CalendrierPage implements OnInit {
     }
 
     async ngOnInit() {
-
     }
+
+    /**
+     * Gestion du changement du mois affiché dans le titre du calendrier
+     * @param title
+     */
 
     onViewTitleChanged(title: string) {
         this.currentMonth = title;
     }
+
+    /**
+     * Cacher/afficher le formulaire d'ajout d'évenement
+     */
 
     showHideForm() {
         this.showAddEvent = !this.showAddEvent;
@@ -65,6 +80,11 @@ export class CalendrierPage implements OnInit {
         };
     }
 
+
+    /**
+     * Ajouter un évenement en base. Les coordonnées ne sont pas initialisées ici, car elles le seront plus tard.
+     */
+
     addEvent() {
         let key = this.afDB.list('evenements').push({
             title: this.newEvent.title,
@@ -74,15 +94,22 @@ export class CalendrierPage implements OnInit {
             lat: '',
             lng: ''
         });
-        console.log(('Id event : ' + key.key));
         this.showHideForm();
         this.selectLocation(key.key);
     }
+
+    /**
+     * Redirige vers la page de sélection de lieu pour l'évenement fraîchement créé;
+     * @param idEvent l'évenement en question
+     */
 
     selectLocation(idEvent) {
         this.router.navigate(['/map-event', idEvent]);
     }
 
+    /**
+     * Charger tous les évenements présents en base afin de les assigner au calendrier, pour ensuite pouvoir les afficher
+     */
     loadEvent() {
         var that = this;
         this.afDB.list('/evenements').snapshotChanges(['child_added']).subscribe(actions => {
@@ -101,8 +128,12 @@ export class CalendrierPage implements OnInit {
         });
     }
 
+    /**
+     * Ouvrir une modale contenant les informations de l'évenement
+     * @param event
+     */
+
     async onEventSelected(event: any) {
-        console.log('Event: ' + JSON.stringify(event));
         const modal = await this.modalController.create({
             component: EventPage,
             componentProps: event
@@ -110,12 +141,21 @@ export class CalendrierPage implements OnInit {
         return await modal.present();
     }
 
+    /**
+     * Gère automatiquement la sélection de la date du jour pour la création d'un évenement
+     * @param ev
+     */
+
     onTimeSelected(ev: any) {
         const selected = new Date(ev.selectedTime);
         this.newEvent.startTime = selected.toISOString();
         selected.setHours(selected.getHours() + 1);
         this.newEvent.endTime = (selected.toISOString());
     }
+
+    /**
+     * Rediriger vers la page de détails du profil de l'utilisateur connecté
+     */
 
     afficherProfil() {
         return new Promise<any>((resolve, reject) => {
