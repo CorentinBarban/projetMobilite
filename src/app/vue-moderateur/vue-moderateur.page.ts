@@ -6,6 +6,10 @@ import {Component, OnInit, ViewChild} from '@angular/core';
     styleUrls: ['vue-moderateur.page.scss']
 })
 
+/**
+ * Cette classe sert de composant à la vue modérateur et de ses différents onglets
+ */
+
 export class VueModerateurPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ title: string; note: string; icon: string }> = [];
@@ -15,9 +19,4 @@ export class VueModerateurPage implements OnInit {
 
     ngOnInit() {
     }
-
-    // add back when alpha.4 is out
-    // navigate(item) {
-    //   this.router.navigate(['/list', JSON.stringify(item)]);
-    // }
 }

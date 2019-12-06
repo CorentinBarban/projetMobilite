@@ -17,6 +17,10 @@ export interface Image {
     styleUrls: ['./register.page.scss'],
 })
 
+/**
+ * Cette classe permet à un utilisateur qui n'a pas encore de compte de s'en créer un
+ */
+
 export class RegisterPage implements OnInit {
     validations_form: FormGroup;
     url: string= "/assets/images/add.png";
@@ -46,6 +50,10 @@ export class RegisterPage implements OnInit {
         private storage: AngularFireStorage
     ) { }
 
+    /**
+     * S'assure que les informations présentes dans les champs respectent bien les patterns définis
+     */
+
     ngOnInit() {
         this.validations_form = this.formBuilder.group({
             url:new FormControl('', Validators.compose([
@@ -68,6 +76,10 @@ export class RegisterPage implements OnInit {
         });
     }
 
+    /**
+     * Tentative de création de compte. Si le compte est créé, l'utilisateur est redirigé.
+     * @param value
+     */
     tryRegister(value) {
         this.authService.doRegister(value)
             .then(res => {
@@ -78,16 +90,28 @@ export class RegisterPage implements OnInit {
                 this.errorMessage = err.message;
                 this.successMessage = '';
             });
-        console.log('ca amrche');
     }
+
+    /**
+     * Retour sur la page de connexion
+     */
 
     goLoginPage() {
         this.router.navigate(['/login']);
     }
 
+    /**
+     * Instance de menu lors de la création de la page
+     */
+
     ionViewWillEnter() {
         this.menu.enable(false);
     }
+
+    /**
+     * Gère l'upload de photo de profil et son affichage
+     * @param event
+     */
 
     async uploadImage(event) {
         this.loading = true;
@@ -100,10 +124,9 @@ export class RegisterPage implements OnInit {
 
             reader.readAsDataURL(event.target.files[0]);
             // For Preview Of Image
-            reader.onload = (e:any) => { // called once readAsDataURL is completed
+            reader.onload = (e: any) => {
                 this.url = e.target.result;
 
-                // For Uploading Image To Firebase
                 const fileraw = event.target.files[0];
                 console.log(this.newImage.id);
                 const filePath = '/Image/'+ this.newImage.id + '/'+ this.newImage.id;
@@ -115,17 +138,21 @@ export class RegisterPage implements OnInit {
                         console.log(a);
                         this.validations_form.get('url').setValue(a);
                         this.newImage.image = a;
-                        this.loading = false;
                     });
-
                     this.afs.collection('Image').doc(this.newImage.id).set(this.newImage);
                 });
             }, error => {
-                alert("Error");
+                alert('Erreur');
             }
-
         }
     }
+
+    /**
+     * Gère la sauvegarde de la photo de profil
+     * @param filePath
+     * @param file
+     * @constructor
+     */
 
     SaveImageRef(filePath, file) {
 

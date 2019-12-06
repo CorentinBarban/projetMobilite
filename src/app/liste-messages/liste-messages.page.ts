@@ -10,6 +10,10 @@ import {AlertController} from "@ionic/angular";
     templateUrl: 'liste-messages.page.html',
     styleUrls: ['liste-messages.page.scss']
 })
+
+/**
+ * Cette classe permet de récupérer les différents messages laissés à un lieu taggué
+ */
 export class ListeMessagesPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ message: string; mail: string; icon: string }> = [];
@@ -35,21 +39,22 @@ export class ListeMessagesPage implements OnInit {
         this.initField(this.items);
     }
 
+    /**
+     * Initialisation de la liste de messages
+     * @param items
+     */
+
     initField(items) {
         var that = this;
         this.firebaseService.getAllMarkers().then(function (lieux) {
-            console.log('(liste-msg) LISTE NON VIDE ');
             for (let key of Object.keys(lieux)) {
                 let lieu = lieux[key];
-                console.log('(liste-msg) LISTE NON VIDE + lieu :' + lieu.lat + ' ' + that.lat);
                 if (Math.round(lieu.lat * 100) / 100 == Math.round(that.lat * 100) / 100 && Math.round(lieu.lgt * 100) / 100 == Math.round(that.lng * 100) / 100) {
                     that.idLieu = key;
-                    console.log('(liste-msg) LIEU TROUVE : ' + that.idLieu);
                     if (lieu.messages != undefined) {
                         document.getElementById("vide").innerHTML = "";
                         for (let keyLieu of Object.keys(lieu.messages)) {
                             let message = lieu.messages[keyLieu];
-                            console.log('Ajout du message : ' + message);
                             items.push({
                                 message: message,
                                 icon: 'mail'
@@ -60,14 +65,20 @@ export class ListeMessagesPage implements OnInit {
                     }
                 }
             }
-
-
         }).catch(error => console.log('Erreur : liste de lieux vide (liste-messages.ts)'));
     }
+
+    /**
+     * Retour en arrière
+     */
 
     goBack() {
         this.navLocation.back();
     }
+
+    /**
+     * Ajouter un message à la liste des messages déja existants
+     */
 
     async ajouterMessage() {
         const alert = await this.alertController.create({
@@ -101,7 +112,7 @@ export class ListeMessagesPage implements OnInit {
 
         await alert.present();
 
-        async function presentToast() {
+        async function presentToast() { //Afficher un toast lorsque le message est créé
             const toast = document.createElement('ion-toast');
             toast.message = 'Message ajouté !';
             toast.duration = 1000;

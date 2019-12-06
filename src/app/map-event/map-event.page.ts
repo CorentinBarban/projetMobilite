@@ -20,6 +20,10 @@ import {AngularFireDatabase} from "@angular/fire/database";
     templateUrl: './map-event.page.html',
     styleUrls: ['./map-event.page.scss'],
 })
+
+/**
+ * Cette classe permet de sélectionner l'endroit où se déroulera un évenement précédemment créé
+ */
 export class MapEventPage implements OnInit {
     idEvent;
     map: GoogleMap; //Instance de carte
@@ -49,10 +53,13 @@ export class MapEventPage implements OnInit {
         private afDB: AngularFireDatabase,
     ) {
         this.activatedRoute.params.subscribe((res) => {
-            this.idEvent = res['id'];
-            console.log('id event récupéré :' + this.idEvent);
+            this.idEvent = res['id']; //Récupération de l'id de l'évenement en question
         });
     }
+
+    /**
+     * Initialisation de la carte et de la position de l'utilisateur
+     */
 
     async ngOnInit() {
         await this.platform.ready();
@@ -61,7 +68,7 @@ export class MapEventPage implements OnInit {
     }
 
     /**
-     * Charger la map avec google map
+     * Charger la map avec Google Maps
      */
     loadMap() {
         Environment.setEnv({
@@ -73,7 +80,7 @@ export class MapEventPage implements OnInit {
     }
 
     /**
-     * Obtenir ca position actuelle
+     * Obtenir la position géographique actuelle de l'utilisateur
      */
 
     async getPosition() {
@@ -107,21 +114,32 @@ export class MapEventPage implements OnInit {
                     .subscribe(() => {
                         this.lat = marker.getPosition().lat;
                         this.lgt = marker.getPosition().lng;
-                        console.log('Coordonnées du marker :' + this.lat + ' ' + this.lgt);
                     });
                 marker.showInfoWindow();
             });
         });
     }
 
+    /**
+     * Sauvegarde de la position choisie
+     */
+
     savePosition() {
         this.afDB.database.ref('evenements/' + this.idEvent).update({lat: this.lat, lng: this.lgt});
         this.router.navigate(['/calendrier']);
     }
 
+    /**
+     * Instance de menu dès la création de la page
+     */
+
     ionViewWillEnter() {
         this.menu.enable(true);
     }
+
+    /**
+     * Retour arrière
+     */
 
     goBack() {
         this.router.navigate(['/calendrier']);

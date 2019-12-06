@@ -10,6 +10,10 @@ import {FirebaseDatabase} from "@angular/fire/firebase.app.module";
     templateUrl: 'liste-lieux-personne.page.html',
     styleUrls: ['liste-lieux-personne.scss']
 })
+
+/**
+ * Classe contenant la liste des lieux qu'une personne a taggé, afin de les afficher
+ */
 export class ListeLieuxPersonnePage implements OnInit {
     private selectedItem: any;
     public listeLieux: Array<{ id: string; lat: string; lgt: string; icon: string; horodatage: string; count; }> = [];
@@ -31,6 +35,12 @@ export class ListeLieuxPersonnePage implements OnInit {
     ngOnInit() {
         this.initFields(this.idPersonne, this.listeLieux);
     }
+
+    /**
+     * Récupère tous les lieux que l'utilisateur a taggé présents en base et les affiche dans une liste
+     * @param user l'id de la personne passé dans l'URL
+     * @param listeLieux servant à stocker la liste des lieux pour l'afficher
+     */
 
     initFields(user, listeLieux) {
         let i = 1;
@@ -59,6 +69,9 @@ export class ListeLieuxPersonnePage implements OnInit {
         });
     }
 
+    /**
+     * Retour arrière
+     */
 
     goBack() {
         this.navLocation.back();

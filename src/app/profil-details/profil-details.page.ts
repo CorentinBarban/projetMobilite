@@ -19,6 +19,10 @@ export interface Image {
     templateUrl: './profil-details.page.html',
     styleUrls: ['./profil-details.page.scss'],
 })
+
+/**
+ * Cette classe permet d'afficher les informations d'un utilisateur
+ */
 export class ProfilDetailsPage implements OnInit {
     idPersonne;
     nom;
@@ -47,6 +51,24 @@ export class ProfilDetailsPage implements OnInit {
         });
     }
 
+    /**
+     * Récupération et affichage des informations de l'utilisateur
+     */
+
+    initField() {
+        let that = this;
+        this.fireService.getUserInformation(this.idPersonne).then(function(value) {
+            that.nom = value.nom;
+            that.prenom = value.prenom;
+            that.email = value.email;
+            that.url = value.url;
+        });
+    }
+
+    /**
+     * Permet d'afficher ou de masquer le bouton d'édition de compte si le compte consulté n'est pas celui de l'utilisateur connecté
+     */
+
     ngOnInit() {
         this.afAuth.user.subscribe(currentUser => {
             if (currentUser.uid != this.idPersonne) {
@@ -56,13 +78,25 @@ export class ProfilDetailsPage implements OnInit {
         });
     }
 
+    /**
+     * Instance de menu dès la création de la page
+     */
+
     ionViewWillEnter() {
         this.menu.enable(true);
     }
 
+    /**
+     * Retour arrière
+     */
+
     goBack() {
         this.router.navigate(['/home']);
     }
+
+    /**
+     * Déconnexion de l'utilisateur
+     */
 
     logOut() {
         let that = this;
@@ -81,15 +115,9 @@ export class ProfilDetailsPage implements OnInit {
         }
     }
 
-    initField() {
-        let that = this;
-        this.fireService.getUserInformation(this.idPersonne).then(function (value) {
-            that.nom = value.nom;
-            that.prenom = value.prenom;
-            that.email = value.email;
-            that.url = value.url;
-        });
-    }
+    /**
+     * Si le profil consulté est celui de l'utilisateur connecté, il a la possibilité d'éditer son compte
+     */
 
     editer() {
         return new Promise<any>((resolve, reject) => {

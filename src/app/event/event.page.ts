@@ -67,6 +67,10 @@ export class EventPage implements OnInit {
         });
     }
 
+    /**
+     * Fermer la modale
+     */
+
     close() {
         this.modalController.dismiss();
     }

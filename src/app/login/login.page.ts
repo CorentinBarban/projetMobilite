@@ -10,6 +10,10 @@ import { Router } from '@angular/router';
     styleUrls: ['./login.page.scss'],
 })
 
+/**
+ * Cette classe gère la connexion d'un utilisateur disposant déja d'un compte à l'application
+ */
+
 export class LoginPage implements OnInit {
     validations_form: FormGroup;
     errorMessage: string = '';
@@ -31,6 +35,18 @@ export class LoginPage implements OnInit {
         private router: Router
     ) { }
 
+    /**
+     * Instaure le menu dès la création de la page
+     */
+
+    ionViewWillEnter() {
+        this.menu.enable(false);
+    }
+
+    /**
+     * Vérifie si les informations entrées dans le formulaire respectent bien les patterns définis.
+     */
+
     ngOnInit() {
         this.validations_form = this.formBuilder.group({
             email: new FormControl('', Validators.compose([
@@ -44,21 +60,25 @@ export class LoginPage implements OnInit {
         });
     }
 
+    /**
+     * Tentative de connexion de l'utilisateur, avec soit redirection soit affichage du message d'erreur selon l'issue
+     * @param value
+     */
+
     tryLogin(value) {
         this.authService.doLogin(value)
             .then(res => {
                 this.router.navigate(['/home']);
             }, err => {
                 this.errorMessage = err.message;
-                console.log(err);
             });
     }
 
+    /**
+     * Redirige vers la page de création de compte
+     */
+
     goRegisterPage() {
         this.router.navigate(['/register']);
-    }
-
-    ionViewWillEnter() {
-        this.menu.enable(false);
     }
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MenuController} from '@ionic/angular';
+import {LoadingController, MenuController} from '@ionic/angular';
 import {AuthService} from '../services/auth.service';
 import {FirebaseService} from '../services/firebase.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -18,6 +18,10 @@ export interface Image {
     templateUrl: './profil-details-edit.page.html',
     styleUrls: ['./profil-details-edit.page.scss'],
 })
+
+/**
+ * Cette classe permet à l'utilisateur de modifier les informations de son compte
+ */
 export class ProfilDetailsEditPage implements OnInit {
     idPersonne;
     validationsForm: FormGroup;
@@ -25,7 +29,7 @@ export class ProfilDetailsEditPage implements OnInit {
     newImage: Image = {
         id: this.afs.createId(), image: ''
     };
-    loading: boolean = false;
+    loading: any;
     modeEdit: boolean = false;
 
     constructor(
@@ -37,12 +41,17 @@ export class ProfilDetailsEditPage implements OnInit {
         private formBuilder: FormBuilder,
         private afs: AngularFirestore,
         private storage: AngularFireStorage,
+        public loadingCtrl: LoadingController,
         private activatedRoute: ActivatedRoute
     ) {
         this.activatedRoute.params.subscribe((res) => {
             this.idPersonne = res['id'];
         });
     }
+
+    /**
+     * Lance la récupération + affichage des informations en base, et vérifie que le contenu des champs respecte les patterns définis
+     */
 
     ngOnInit() {
 
@@ -64,63 +73,64 @@ export class ProfilDetailsEditPage implements OnInit {
         });
     }
 
+    /**
+     * Instance du menu lors de la création de la page
+     */
+
     ionViewWillEnter() {
         this.menu.enable(true);
     }
+
+    /**
+     * Retour arrière
+     */
 
     goBack() {
         this.location.back();
     }
 
-    logOut() {
-        let that = this;
-        presentToast();
-        this.authService.doLogout().then(function () {
-            that.router.navigate(['/login']);
-        });
+    /**
+     * Gère l'upload de la nouvelle photo de profil de l'utilisateur et son affichage
+     * @param event le clic sur l'image
+     */
 
-        async function presentToast() {
-            const toast = document.createElement('ion-toast');
-            toast.message = 'Déconnecté';
-            toast.duration = 1000;
-
-            document.body.appendChild(toast);
-            return toast.present();
-        }
-    }
-
-    uploadImage(event) {
+    async uploadImage(event) {
         this.loading = true;
+        this.loading = await this.loadingCtrl.create({
+            message: 'Patientez...'
+        });
+        await this.loading.present();
         if (event.target.files && event.target.files[0]) {
             var reader = new FileReader();
 
             reader.readAsDataURL(event.target.files[0]);
-            // For Preview Of Image
-            reader.onload = (e: any) => { // called once readAsDataURL is completed
-
-
-                // For Uploading Image To Firebase
+            reader.onload = (e: any) => {
                 const fileraw = event.target.files[0];
-                console.log(this.newImage.id);
                 const filePath = '/Image/' + this.newImage.id + '/' + this.newImage.id;
                 const result = this.SaveImageRef(filePath, fileraw);
                 const ref = result.ref;
                 result.task.then(a => {
                     ref.getDownloadURL().subscribe(a => {
+                        this.loading.dismiss();
                         this.validationsForm.get('url').setValue(a);
                         this.urlImage = a;
                         this.newImage.image = a;
-                        console.log(a);
                         this.loading = false;
                     });
                     this.afs.collection('Image').doc(this.newImage.id).set(this.newImage);
                 });
             }, error => {
-                alert("Error");
+                alert('Erreur');
             }
-
         }
     }
+
+    /**
+     * Gère la sauvegarde de la nouvelle photo de profil de l'utilisateur
+     * @param filePath le chemin de l'image en base
+     * @param file l'image
+     * @constructor
+     */
 
     SaveImageRef(filePath, file) {
         return {
@@ -128,6 +138,10 @@ export class ProfilDetailsEditPage implements OnInit {
             , ref: this.storage.ref(filePath)
         };
     }
+
+    /**
+     * Récupération + affichage des différentes informations de l'utilisateur
+     */
 
     initField() {
         let that = this;
@@ -140,8 +154,13 @@ export class ProfilDetailsEditPage implements OnInit {
         });
     }
 
+    /**
+     * Sauvegarde des nouvelles informations de l'utilisateur en base
+     * @param value
+     */
+
     updateInformation(value) {
-        this.authService.updateInformation(value); // PROBLEME : LORS DE LA MODIFICATION, TOUT LES USERS SONT MODIFIES ET LES LIEUX SUPPRIMES
+        this.authService.updateInformation(value);
         presentToast();
         this.initField();
         this.goBack();

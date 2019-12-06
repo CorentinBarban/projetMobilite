@@ -10,6 +10,10 @@ import {AngularFireAuth} from "@angular/fire/auth";
     styleUrls: ['liste-personnes.page.scss']
 })
 
+/**
+ * Classe servant de fragment contient la liste des personnes ayant taggué des lieux, afin de les afficher dans les onglets de la vue modérateur.
+ */
+
 export class ListePersonnesPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ email: string; nom: string; url: string; id: string; }> = [];
@@ -22,13 +26,14 @@ export class ListePersonnesPage implements OnInit {
     ) {
     }
 
-    afficherDetails(id) {
-        this.router.navigate(['/vue-moderateur/liste-personnes/liste-lieux-personne', id]);
-    }
-
     async ngOnInit() {
         await this.initFields(this.items);
     }
+
+    /**
+     * Initialisation de la liste des utilisateurs présents en base
+     * @param items
+     */
 
     async initFields(items) {
         this.firebaseService.getAllUsers().then(function (personnes) { // Récupérer les lieux, regarder dans l'idUser.
@@ -54,6 +59,17 @@ export class ListePersonnesPage implements OnInit {
         });
     }
 
+    /**
+     * Ouvrir une nouvelle page contenant les lieux taggués par la personne sélectionnée
+     * @param id : l'id de l'utilisateur
+     */
+    afficherDetails(id) {
+        this.router.navigate(['/vue-moderateur/liste-personnes/liste-lieux-personne', id]);
+    }
+
+    /**
+     * Affiche le profil de l'utilisateur connecté
+     */
     afficherProfil() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
