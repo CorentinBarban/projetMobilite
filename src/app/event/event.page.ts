@@ -13,7 +13,6 @@ import {FirebaseService} from '../services/firebase.service';
 /**
  * Classe gérant l'affichage de la modale affichant les informations d'un évenement particulier
  */
-
 export class EventPage implements OnInit {
     title: string;
     description: string;
@@ -43,7 +42,6 @@ export class EventPage implements OnInit {
     /**
      * Remplissage automatique des champs à partir des données en base, y compris la liste des participants ayant taggé leur position à proximité
      */
-
     initFields() {
         var that = this;
         this.firebaseService.getAllEvents().then(function (events) {
@@ -70,7 +68,6 @@ export class EventPage implements OnInit {
     /**
      * Fermer la modale
      */
-
     close() {
         this.modalController.dismiss();
     }

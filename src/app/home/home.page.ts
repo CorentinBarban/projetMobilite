@@ -292,7 +292,6 @@ export class HomePage implements OnInit {
      * Créer un écouteur sur un marqueur afin d'afficher les messages qui y ont été déposés
      * @param marker
      */
-
     async createMarkerListener(marker) {
         let that = this;
         marker.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
@@ -326,7 +325,6 @@ export class HomePage implements OnInit {
     /**
      * Récupérer tous les évenements des autres utilisateurs en base
      */
-
     getAllEvents() {
         let that = this;
         this.firebaseService.getAllEvents().then(function (events) {
@@ -350,7 +348,6 @@ export class HomePage implements OnInit {
     /**
      * Charger la liste des personnes inscrites dans une liste pour la recherche par utilisateur
      */
-
     chargerListePersonnes() {
         let that = this;
         this.firebaseService.getAllUsers().then(function (personnes) {
@@ -370,7 +367,6 @@ export class HomePage implements OnInit {
      * Affichage de la liste avec la personne concernée en fonction de la recherche
      * @param event l'évenement déclenchant la méthode, contenant les informations
      */
-
     getResults(event) {
         document.getElementById('map_canvas').style.display = 'none';
         document.getElementById('liste-personnes').style.display = 'contents';
@@ -403,7 +399,6 @@ export class HomePage implements OnInit {
     /**
      * Afficher le profil de l'utilisateur connecté
      */
-
     afficherProfil() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {

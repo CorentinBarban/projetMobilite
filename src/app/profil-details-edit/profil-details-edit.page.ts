@@ -52,7 +52,6 @@ export class ProfilDetailsEditPage implements OnInit {
     /**
      * Lance la récupération + affichage des informations en base, et vérifie que le contenu des champs respecte les patterns définis
      */
-
     ngOnInit() {
 
         this.initField();
@@ -76,7 +75,6 @@ export class ProfilDetailsEditPage implements OnInit {
     /**
      * Instance du menu lors de la création de la page
      */
-
     ionViewWillEnter() {
         this.menu.enable(true);
     }
@@ -84,7 +82,6 @@ export class ProfilDetailsEditPage implements OnInit {
     /**
      * Retour arrière
      */
-
     goBack() {
         this.location.back();
     }
@@ -93,7 +90,6 @@ export class ProfilDetailsEditPage implements OnInit {
      * Gère l'upload de la nouvelle photo de profil de l'utilisateur et son affichage
      * @param event le clic sur l'image
      */
-
     async uploadImage(event) {
         this.loading = true;
         this.loading = await this.loadingCtrl.create({
@@ -131,7 +127,6 @@ export class ProfilDetailsEditPage implements OnInit {
      * @param file l'image
      * @constructor
      */
-
     SaveImageRef(filePath, file) {
         return {
             task: this.storage.upload(filePath, file)
@@ -142,7 +137,6 @@ export class ProfilDetailsEditPage implements OnInit {
     /**
      * Récupération + affichage des différentes informations de l'utilisateur
      */
-
     initField() {
         let that = this;
         this.fireService.getCurrentUserInformation().then(function (value) {
@@ -158,7 +152,6 @@ export class ProfilDetailsEditPage implements OnInit {
      * Sauvegarde des nouvelles informations de l'utilisateur en base
      * @param value
      */
-
     updateInformation(value) {
         this.authService.updateInformation(value);
         presentToast();

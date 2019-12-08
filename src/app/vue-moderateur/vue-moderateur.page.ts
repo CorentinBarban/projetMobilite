@@ -9,7 +9,6 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 /**
  * Cette classe sert de composant à la vue modérateur et de ses différents onglets
  */
-
 export class VueModerateurPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ title: string; note: string; icon: string }> = [];

@@ -24,7 +24,6 @@ export class AuthService {
      * Création de compte à partir d'un email et d'un mdp
      * @param value : les informations transmises
      */
-
     doRegister(value) {
         var that = this;
         return new Promise<any>((resolve, reject) => {
@@ -39,7 +38,6 @@ export class AuthService {
      * Stockage de l'utilisateur créé comme noeud en base Firebase
      * @param value
      */
-
     createUser(value) {
         let postData = {
             prenom: value.prenom,
@@ -59,7 +57,6 @@ export class AuthService {
      * Mise à jour des informations de l'utilisateur en base Firebase
      * @param value
      */
-
     updateInformation(value) {
         let postData = {
             prenom: value.prenom,
@@ -79,7 +76,6 @@ export class AuthService {
      * Connexion de l'utilisateur à l'application
      * @param value
      */
-
     doLogin(value) {
         return new Promise<any>((resolve, reject) => {
             firebase.auth().signInWithEmailAndPassword(value.email, value.password)
@@ -92,7 +88,6 @@ export class AuthService {
     /**
      * Déconnexion de l'utilisateur de l'application
      */
-
     doLogout() {
         return new Promise((resolve, reject) => {
             this.afAuth.auth.signOut()

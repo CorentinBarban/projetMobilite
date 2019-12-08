@@ -30,6 +30,9 @@ export class ListePersonnesLieuPage implements OnInit {
         await this.getPosition();
     }
 
+    /**
+     * Obtenir la position
+     */
     getPosition() {
         var that = this;
         console.log('Get Position :');
@@ -44,6 +47,9 @@ export class ListePersonnesLieuPage implements OnInit {
 
     }
 
+    /**
+     * Obtenir tous les markers pour toutes les personnes
+     */
     getAllMarkers() {
         var that = this;
         console.log('Get Markers :');
@@ -61,6 +67,9 @@ export class ListePersonnesLieuPage implements OnInit {
         });
     }
 
+    /**
+     * Obtenir la liste des utilisateurs
+     */
     getUsers() {
         var that = this;
         console.log('Get Users :');
@@ -77,6 +86,9 @@ export class ListePersonnesLieuPage implements OnInit {
         }
     }
 
+    /**
+     * Revenir en arriere
+     */
     goBack() {
         this.navLocation.back();
     }

@@ -13,7 +13,6 @@ import {AngularFireAuth} from "@angular/fire/auth";
 /**
  * Classe servant de fragment contient la liste des personnes ayant taggué des lieux, afin de les afficher dans les onglets de la vue modérateur.
  */
-
 export class ListePersonnesPage implements OnInit {
     private selectedItem: any;
     public items: Array<{ email: string; nom: string; url: string; id: string; }> = [];
@@ -34,7 +33,6 @@ export class ListePersonnesPage implements OnInit {
      * Initialisation de la liste des utilisateurs présents en base
      * @param items
      */
-
     async initFields(items) {
         this.firebaseService.getAllUsers().then(function (personnes) { // Récupérer les lieux, regarder dans l'idUser.
             for (let key of Object.keys(personnes)) {

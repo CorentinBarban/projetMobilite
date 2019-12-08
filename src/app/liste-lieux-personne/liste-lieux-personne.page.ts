@@ -41,7 +41,6 @@ export class ListeLieuxPersonnePage implements OnInit {
      * @param user l'id de la personne passé dans l'URL
      * @param listeLieux servant à stocker la liste des lieux pour l'afficher
      */
-
     initFields(user, listeLieux) {
         let i = 1;
         this.firebaseService.getUserInformation(user).then(function (infos) {
@@ -72,7 +71,6 @@ export class ListeLieuxPersonnePage implements OnInit {
     /**
      * Retour arrière
      */
-
     goBack() {
         this.navLocation.back();
     }

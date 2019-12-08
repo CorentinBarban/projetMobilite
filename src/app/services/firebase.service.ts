@@ -24,7 +24,6 @@ export class FirebaseService {
     /***
      * Récupérer les informations de l'utilisateur connecté
      */
-
     getCurrentUserInformation() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
@@ -42,7 +41,6 @@ export class FirebaseService {
      * Récupérer les informations d'un lieu taggué précis
      * @param idLieu
      */
-
     getPosition(idLieu) {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
@@ -60,7 +58,6 @@ export class FirebaseService {
     /**
      * Récupérer la liste de tous les utilisateurs présents en base
      */
-
     getAllUsers() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
@@ -78,7 +75,6 @@ export class FirebaseService {
      * Récupérer les informations d'un utilisateur précis
      * @param userId
      */
-
     getUserInformation(userId) {
         return new Promise<any>((resolve, reject) => {
             let starCountRef = firebase.database().ref('/users/' + userId);
@@ -91,7 +87,6 @@ export class FirebaseService {
     /**
      * Désabonnement d'un utilisateur à la base de données lors de sa déconnexion
      */
-
     unsubscribeOnLogOut() {
         this.snapshotChangesSubscription.unsubscribe();
     }
@@ -100,7 +95,6 @@ export class FirebaseService {
      * Assigner un lieu taggué à un utilisateur
      * @param value : les informations du lieu à ajouter en base
      */
-
     createUserPosition(value) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
@@ -119,7 +113,6 @@ export class FirebaseService {
      * Ajout d'un lieu taggué à la liste générale des lieux
      * @param value
      */
-
     createLieu(value) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
@@ -142,7 +135,6 @@ export class FirebaseService {
      * @param value
      * @param uniqueID
      */
-
     createMessage(value, uniqueID) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
@@ -159,7 +151,6 @@ export class FirebaseService {
     /**
      * Récupérer la liste de tous les évenements en base
      */
-
     getAllEvents() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
@@ -178,7 +169,6 @@ export class FirebaseService {
      * @param value : les informations du message
      * @param idLieu
      */
-
     addMessageToLieu(value, idLieu) {
         return new Promise<any>((resolve, reject) => {
             let currentUser = firebase.auth().currentUser;
@@ -193,7 +183,6 @@ export class FirebaseService {
     /**
      * Récupérer tous les lieux taggués par l'utilisateur connecté
      */
-
     getAllMarkerForCurrentUser(){
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
@@ -210,7 +199,6 @@ export class FirebaseService {
     /**
      * Récupérer la liste génrale des lieux taggués
      */
-
     getAllMarkers() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {

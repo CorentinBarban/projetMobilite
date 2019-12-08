@@ -53,7 +53,6 @@ export class RegisterPage implements OnInit {
     /**
      * S'assure que les informations présentes dans les champs respectent bien les patterns définis
      */
-
     ngOnInit() {
         this.validations_form = this.formBuilder.group({
             url:new FormControl('', Validators.compose([
@@ -95,7 +94,6 @@ export class RegisterPage implements OnInit {
     /**
      * Retour sur la page de connexion
      */
-
     goLoginPage() {
         this.router.navigate(['/login']);
     }
@@ -103,7 +101,6 @@ export class RegisterPage implements OnInit {
     /**
      * Instance de menu lors de la création de la page
      */
-
     ionViewWillEnter() {
         this.menu.enable(false);
     }
@@ -112,7 +109,6 @@ export class RegisterPage implements OnInit {
      * Gère l'upload de photo de profil et son affichage
      * @param event
      */
-
     async uploadImage(event) {
         this.loading = true;
         this.loading = await this.loadingCtrl.create({
@@ -120,7 +116,7 @@ export class RegisterPage implements OnInit {
         });
         await this.loading.present();
         if (event.target.files && event.target.files[0]) {
-            var reader = new FileReader();
+            let reader = new FileReader();
 
             reader.readAsDataURL(event.target.files[0]);
             // For Preview Of Image
@@ -153,7 +149,6 @@ export class RegisterPage implements OnInit {
      * @param file
      * @constructor
      */
-
     SaveImageRef(filePath, file) {
 
         return {

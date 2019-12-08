@@ -60,7 +60,6 @@ export class MapEventPage implements OnInit {
     /**
      * Initialisation de la carte et de la position de l'utilisateur
      */
-
     async ngOnInit() {
         await this.platform.ready();
         await this.loadMap();
@@ -82,7 +81,6 @@ export class MapEventPage implements OnInit {
     /**
      * Obtenir la position géographique actuelle de l'utilisateur
      */
-
     async getPosition() {
         this.lat = null;
         this.lgt = null;
@@ -123,7 +121,6 @@ export class MapEventPage implements OnInit {
     /**
      * Sauvegarde de la position choisie
      */
-
     savePosition() {
         this.afDB.database.ref('evenements/' + this.idEvent).update({lat: this.lat, lng: this.lgt});
         this.router.navigate(['/calendrier']);
@@ -132,7 +129,6 @@ export class MapEventPage implements OnInit {
     /**
      * Instance de menu dès la création de la page
      */
-
     ionViewWillEnter() {
         this.menu.enable(true);
     }
@@ -140,7 +136,6 @@ export class MapEventPage implements OnInit {
     /**
      * Retour arrière
      */
-
     goBack() {
         this.router.navigate(['/calendrier']);
     }

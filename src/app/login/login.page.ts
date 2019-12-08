@@ -64,7 +64,6 @@ export class LoginPage implements OnInit {
      * Tentative de connexion de l'utilisateur, avec soit redirection soit affichage du message d'erreur selon l'issue
      * @param value
      */
-
     tryLogin(value) {
         this.authService.doLogin(value)
             .then(res => {
@@ -77,7 +76,6 @@ export class LoginPage implements OnInit {
     /**
      * Redirige vers la page de création de compte
      */
-
     goRegisterPage() {
         this.router.navigate(['/register']);
     }

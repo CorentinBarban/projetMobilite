@@ -43,7 +43,6 @@ export class ListeMessagesPage implements OnInit {
      * Initialisation de la liste de messages
      * @param items
      */
-
     initField(items) {
         var that = this;
         this.firebaseService.getAllMarkers().then(function (lieux) {
@@ -71,7 +70,6 @@ export class ListeMessagesPage implements OnInit {
     /**
      * Retour en arrière
      */
-
     goBack() {
         this.navLocation.back();
     }
@@ -79,7 +77,6 @@ export class ListeMessagesPage implements OnInit {
     /**
      * Ajouter un message à la liste des messages déja existants
      */
-
     async ajouterMessage() {
         const alert = await this.alertController.create({
             header: 'Ecrire un message',
@@ -112,6 +109,10 @@ export class ListeMessagesPage implements OnInit {
 
         await alert.present();
 
+        /**
+         * Afficher un toast lorsque le message est crée
+         * @returns {Promise<any>}
+         */
         async function presentToast() { //Afficher un toast lorsque le message est créé
             const toast = document.createElement('ion-toast');
             toast.message = 'Message ajouté !';

@@ -31,7 +31,6 @@ export class ListeLieuxPage implements OnInit {
      * Récupère tous les lieux présents en base et les affiche dans une liste
      * @param items la liste devant contenir les lieux afin de les afficher dans la liste
      */
-
     initFields(items) {
         let i = 1;
         this.firebaseService.getAllMarkers().then(function (lieux) { // Récupérer les lieux, regarder dans l'idUser.
@@ -54,7 +53,6 @@ export class ListeLieuxPage implements OnInit {
      * @param id l'id du lieu
      * @param count une variable servant à savoir le numéro du lieu taggé pour l'affichage
      */
-
     afficherDetails(id, count) {
         this.router.navigate(['/vue-moderateur/liste-lieux/liste-personnes-lieu', id, count]);
     }
@@ -62,7 +60,6 @@ export class ListeLieuxPage implements OnInit {
     /**
      * Retour en arrière
      */
-
     goBack() {
         this.navLocation.back();
     }

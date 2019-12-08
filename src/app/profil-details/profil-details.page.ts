@@ -54,7 +54,6 @@ export class ProfilDetailsPage implements OnInit {
     /**
      * Récupération et affichage des informations de l'utilisateur
      */
-
     initField() {
         let that = this;
         this.fireService.getUserInformation(this.idPersonne).then(function(value) {
@@ -68,7 +67,6 @@ export class ProfilDetailsPage implements OnInit {
     /**
      * Permet d'afficher ou de masquer le bouton d'édition de compte si le compte consulté n'est pas celui de l'utilisateur connecté
      */
-
     ngOnInit() {
         this.afAuth.user.subscribe(currentUser => {
             if (currentUser.uid != this.idPersonne) {
@@ -81,7 +79,6 @@ export class ProfilDetailsPage implements OnInit {
     /**
      * Instance de menu dès la création de la page
      */
-
     ionViewWillEnter() {
         this.menu.enable(true);
     }
@@ -89,7 +86,6 @@ export class ProfilDetailsPage implements OnInit {
     /**
      * Retour arrière
      */
-
     goBack() {
         this.router.navigate(['/home']);
     }
@@ -97,7 +93,6 @@ export class ProfilDetailsPage implements OnInit {
     /**
      * Déconnexion de l'utilisateur
      */
-
     logOut() {
         let that = this;
         presentToast();
@@ -118,7 +113,6 @@ export class ProfilDetailsPage implements OnInit {
     /**
      * Si le profil consulté est celui de l'utilisateur connecté, il a la possibilité d'éditer son compte
      */
-
     editer() {
         return new Promise<any>((resolve, reject) => {
             this.afAuth.user.subscribe(currentUser => {
