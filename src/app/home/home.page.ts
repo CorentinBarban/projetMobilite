@@ -205,7 +205,6 @@ export class HomePage implements OnInit {
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: () => {
-                        console.log('Retour confirmé');
                     }
                 }, {
                     text: 'Valider',

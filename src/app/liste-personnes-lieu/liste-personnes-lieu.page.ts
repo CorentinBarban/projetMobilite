@@ -52,15 +52,12 @@ export class ListePersonnesLieuPage implements OnInit {
      */
     getAllMarkers() {
         var that = this;
-        console.log('Get Markers :');
         this.firebaseService.getAllMarkers().then(function (lieux) {
             for (let key of Object.keys(lieux)) {
                 let lieu = lieux[key];
                 if (lieu.lat == that.latLieu && lieu.lgt == that.lgtLieu) {
-                    console.log('egal, stockage de user ' + lieu.idUser);
                     that.listePersonnesId.push(lieu.idUser);
                 } else {
-                    console.log('Non egal');
                 }
             }
             that.getUsers();
@@ -72,10 +69,8 @@ export class ListePersonnesLieuPage implements OnInit {
      */
     getUsers() {
         var that = this;
-        console.log('Get Users :');
         for (var i = 0; i < this.listePersonnesId.length; i += i + 1) {
             let personne = that.listePersonnesId[i];
-            console.log('Perseo : ' + that.listePersonnesId[i]);
             this.firebaseService.getUserInformation(personne).then(function (infos) {
                 that.listePersonnes.push({
                     nom: infos.nom + ' ' + infos.prenom,

@@ -64,7 +64,7 @@ export class ListeMessagesPage implements OnInit {
                     }
                 }
             }
-        }).catch(error => console.log('Erreur : liste de lieux vide (liste-messages.ts)'));
+        }).catch(error => console.log('Erreur : liste de lieux vide (liste-messages.ts)' + error));
     }
 
     /**
